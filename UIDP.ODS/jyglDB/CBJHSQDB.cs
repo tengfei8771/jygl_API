@@ -12,10 +12,10 @@ namespace UIDP.ODS.jyglDB
 
         public DataTable GetInfo(string XMBH,string XMMC)
         {
-            string sql = " SELECT * FROM jy_srxm WHERE IS_DELETE=0";
+            string sql = " SELECT * FROM jy_cbjh WHERE IS_DELETE=0";
             if (!string.IsNullOrEmpty(XMBH))
             {
-                sql += " AND XMBH='" + XMBH + "'";
+                sql += " AND XMBH LIKE'" + XMBH + "%'";
             } 
             if (!string.IsNullOrEmpty(XMMC))
             {
@@ -25,10 +25,11 @@ namespace UIDP.ODS.jyglDB
             return db.GetDataTable(sql);
         }
 
-        public string CreateInfo(Dictionary<string,object> d)
+        public string CreateInfo(Dictionary<string,object> d,List<Dictionary<string,object>> list,string XMBH)
         {
-            string sql = "INSERT INTO jy_srxm (XMBH,XMMC,CBDW,JSNR,JHZJE,LSJE,BNJE,WLJE,XMPC,CJR,CJSJ,IS_DELETE,CZWZ,SFCW)values(";
-            sql += GetSQLStr(d["XMBH"]);
+            List<string> sqllist = new List<string>();
+            string sql = "INSERT INTO jy_cbjh (XMBH,XMMC,CBDW,JSNR,JHZJE,LSJE,BNJE,WLJE,XMPC,CJR,CJSJ,IS_DELETE,CZWZ,SFCW)values(";
+            sql += GetSQLStr(XMBH);
             sql += GetSQLStr(d["XMMC"]);
             sql += GetSQLStr(d["CBDW"]);
             sql += GetSQLStr(d["JSNR"]);
@@ -44,12 +45,35 @@ namespace UIDP.ODS.jyglDB
             sql += GetSQLStr(d["SFCW"], 1);
             sql = sql.TrimEnd(',');
             sql += ")";
-            return db.ExecutByStringResult(sql);
+            sqllist.Add(sql);
+            int i;
+            if(int.TryParse(d["CZWZ"].ToString(),out i))
+            {
+                if (i == 1)
+                {
+                    foreach (Dictionary<string, object> dic in list)
+                    {
+                        string sql1 = "INSERT INTO jy_cbwz (WZID,XMBH,WZMC,WZSL,WZLX,WZSM,IS_DELETE) VALUES(";
+                        sql1 += GetSQLStr(Guid.NewGuid());
+                        sql1 += GetSQLStr(XMBH);
+                        sql1 += GetSQLStr(dic["WZMC"]);
+                        sql1 += GetSQLStr(dic["WZSL"], 1);
+                        sql1 += GetSQLStr(dic["WZLX"]);
+                        sql1 += GetSQLStr(dic["WZSM"]);
+                        sql1 += GetSQLStr(0, 1);
+                        sql1 = sql1.TrimEnd(',');
+                        sql1 += ")";
+                        sqllist.Add(sql1);                       
+                    }
+                }
+            }            
+            return db.Executs(sqllist);
         }
 
-        public string UpdateInfo(Dictionary<string,object> d)
+        public string UpdateInfo(Dictionary<string,object> d,List<Dictionary<string,object>> list)
         {
-            string sql = " UPDATE jy_srxm SET XMMC=" + GetSQLStr(d["XMMC"]);
+            List<string> sqllist = new List<string>();
+            string sql = " UPDATE jy_cbjh SET XMMC=" + GetSQLStr(d["XMMC"]);
             sql += "CBDW=" + GetSQLStr(d["CBDW"]);
             sql += "JSNR=" + GetSQLStr(d["JSNR"]);
             sql += "JHZJE=" + GetSQLStr(d["JHZJE"], 1);
@@ -65,15 +89,77 @@ namespace UIDP.ODS.jyglDB
             sql = sql.TrimEnd(',');
             sql += " WHERE XMBH=" + GetSQLStr(d["XMBH"]);
             sql = sql.TrimEnd(',');
-            return db.ExecutByStringResult(sql);
+            sqllist.Add(sql);
+            foreach(Dictionary<string,object> dic in list)
+            {
+                if (!dic.ContainsKey("WZID"))
+                {
+                    string sql1 = "INSERT INTO jy_cbwz (WZID,XMBH,WZMC,WZSL,WZLX,WZSM,IS_DELETE) VALUES(";
+                    sql1 += GetSQLStr(Guid.NewGuid());
+                    sql1 += GetSQLStr(d["XMBH"]);
+                    sql1 += GetSQLStr(dic["WZMC"]);
+                    sql1 += GetSQLStr(dic["WZSL"], 1);
+                    sql1 += GetSQLStr(dic["WZLX"]);
+                    sql1 += GetSQLStr(dic["WZSM"]);
+                    sql1 += GetSQLStr(0, 1);
+                    sql1 = sql1.TrimEnd(',');
+                    sql1 += ")";
+                    sqllist.Add(sql1);
+                }
+                else
+                {
+                    string sql2 = "UPDATE jy_cbwz set";
+                    sql2 += " WZMC=" + GetSQLStr(dic["WZMC"]);
+                    sql2 += " WZSL=" + GetSQLStr(dic["WZSL"], 1);
+                    sql2 += " WZLX=" + GetSQLStr(dic["WZLX"]);
+                    sql2 += " WZSM=" + GetSQLStr(dic["WZSM"]);
+                    sql2 = sql2.TrimEnd(',');
+                    sql2 += " WHERE WZID='" + dic["WZID"] + "'";
+                    sqllist.Add(sql2);
+                }
+            }
+            return db.Executs(sqllist);
         }
 
         public string DeleteInfo(Dictionary<string,object> d)
         {
-            string sql = "UPDATE jy_srxm set IS_DELETE=1 WHERE XMBH=" + GetSQLStr(d["XMBH"]);
+            string sql = "UPDATE jy_cbjh set IS_DELETE=1 WHERE XMBH=" + GetSQLStr(d["XMBH"]);
             sql = sql.TrimEnd(',');
             return db.ExecutByStringResult(sql);
         }
+
+        public DataTable GetDetailInfo(string XMBH)
+        {
+            string sql = "select * from jy_cbwz where XMBH='" + XMBH + "' AND IS_DELETE=0";
+            return db.GetDataTable(sql);
+        }
+
+        public string DeleteDetailInfo(string WZID)
+        {
+            string sql = "UPDATE jy_cbwz set IS_DELETE=1 WHERE WZID='" + WZID + "'";
+            return db.ExecutByStringResult(sql);
+        }
+
+        //public string CreateDetailInfo(List<Dictionary<string,object>> list)
+        //{
+        //    List<string> sqllist = new List<string>();
+        //    string XMBH = string.Empty;
+        //    foreach(Dictionary<string,object> d in list)
+        //    {
+        //        string sql = "INSERT INTO jy_cbwz (WZID,XMBH,WZMC,WZSL,WZLX,WZSM,IS_DELETE) VALUES(";
+        //        sql += GetSQLStr(Guid.NewGuid());
+        //        sql += GetSQLStr(XMBH);
+        //        sql += GetSQLStr(d["WZMC"]);
+        //        sql += GetSQLStr(d["WZSL"], 1);
+        //        sql += GetSQLStr(d["WZLX"]);
+        //        sql += GetSQLStr(d["WZSM"]);
+        //        sql += GetSQLStr(d["IS_DELETE"],1);
+        //        sql = sql.TrimEnd(',');
+        //        sql += ")";
+        //        sqllist.Add(sql);
+        //    }
+        //    return db.Executs(sqllist);
+        //}
 
 
         public string GetSQLStr(object s,int flag=0)

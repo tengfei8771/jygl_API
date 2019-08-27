@@ -40,13 +40,15 @@ namespace UIDP.BIZModule.CangChu
         }
 
 
-        public Dictionary<string,object> CreateInfo(Dictionary<string,object> d)
+        public Dictionary<string,object> CreateInfo(List<Dictionary<string,object>> list)
         {
             Dictionary<string, object> r = new Dictionary<string, object>();
             try
             {
-                d["XMBH"] = CreateXMBH();
-                string b = db.CreateInfo(d);
+                string XMBH = CreateXMBH();
+                Dictionary<string, object> d = list[list.Count - 1];
+                list.RemoveAt(list.Count - 1);
+                string b = db.CreateInfo(d,list,XMBH);
                 if (b == "")
                 {
                     r["code"] = 2000;
@@ -68,12 +70,14 @@ namespace UIDP.BIZModule.CangChu
 
 
 
-        public Dictionary<string, object> UpdateInfo(Dictionary<string, object> d)
+        public Dictionary<string, object> UpdateInfo(List<Dictionary<string, object>> list)
         {
             Dictionary<string, object> r = new Dictionary<string, object>();
             try
             {
-                string b = db.UpdateInfo(d);
+                Dictionary<string, object> d = list[list.Count - 1];
+                list.RemoveAt(list.Count - 1);
+                string b = db.UpdateInfo(d,list);
                 if (b == "")
                 {
                     r["code"] = 2000;
@@ -100,6 +104,59 @@ namespace UIDP.BIZModule.CangChu
             try
             {
                 string b = db.DeleteInfo(d);
+                if (b == "")
+                {
+                    r["code"] = 2000;
+                    r["message"] = "success";
+                }
+                else
+                {
+                    r["code"] = -1;
+                    r["message"] = b;
+                }
+            }
+            catch (Exception e)
+            {
+                r["code"] = -1;
+                r["message"] = e.Message;
+            }
+            return r;
+        }
+
+        public Dictionary<string, object> GetDetailInfo(string XMBH)
+        {
+            Dictionary<string, object> r = new Dictionary<string, object>();
+            try
+            {
+                DataTable dt = db.GetDetailInfo(XMBH);
+                if (dt.Rows.Count > 0)
+                {
+                    r["code"] = 2000;
+                    r["message"] = "success";
+                    r["items"] = dt;
+                    r["total"] = dt.Rows.Count;
+                }
+                else
+                {
+                    r["code"] = 2000;
+                    r["message"] = "success,but no info ";
+                    r["total"] = dt.Rows.Count;
+                }
+            }
+            catch (Exception e)
+            {
+                r["code"] = -1;
+                r["message"] = e.Message;
+            }
+            return r;
+        }
+
+        public Dictionary<string, object> DeleteDetailInfo(string WZID)
+        {
+            Dictionary<string, object> r = new Dictionary<string, object>();
+            try
+            {
+                string b = db.DeleteDetailInfo(WZID);
                 if (b == "")
                 {
                     r["code"] = 2000;
