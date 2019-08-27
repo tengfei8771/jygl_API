@@ -10,7 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="jyglModules\" />
+    <Folder Include="CangChu\" />
   </ItemGroup>
 
 </Project>

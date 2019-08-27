@@ -5,7 +5,7 @@ using System.Text;
 using UIDP.ODS.jyglDB;
 using UIDP.UTILITY;
 
-namespace UIDP.BIZModule.CangChu
+namespace UIDP.BIZModule.jyglModules
 {
     public class CBJHSQModule
     {

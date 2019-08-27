@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
-using UIDP.BIZModule.CangChu;
+using UIDP.BIZModule.jyglModules;
 
 namespace JYGL.WebAPI.Controllers.jygl
 {
@@ -25,7 +25,6 @@ namespace JYGL.WebAPI.Controllers.jygl
         public IActionResult DeleteInfo([FromBody]JObject value) => Ok(CB.DeleteInfo(value.ToObject<Dictionary<string, object>>()));
         [HttpGet("GetDetailInfo")]
         public IActionResult GetDetailInfo(string XMBH) => Ok(CB.GetDetailInfo(XMBH));
-
         [HttpGet("DeleteDetailInfo")]
         public IActionResult DeleteDetailInfo(string WZID) => Ok(CB.DeleteDetailInfo(WZID));
     }

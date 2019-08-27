@@ -28,7 +28,7 @@ namespace UIDP.ODS.jyglDB
         public string CreateInfo(Dictionary<string,object> d,List<Dictionary<string,object>> list,string XMBH)
         {
             List<string> sqllist = new List<string>();
-            string sql = "INSERT INTO jy_cbjh (XMBH,XMMC,CBDW,JSNR,JHZJE,LSJE,BNJE,WLJE,XMPC,CJR,CJSJ,IS_DELETE,CZWZ,SFCW)values(";
+            string sql = "INSERT INTO jy_cbjh (XMBH,XMMC,CBDW,JSNR,JHZJE,LSJE,BNJE,WLJE,XMPC,CJR,CJSJ,IS_DELETE,CZWZ,SFCW,XMLB)values(";
             sql += GetSQLStr(XMBH);
             sql += GetSQLStr(d["XMMC"]);
             sql += GetSQLStr(d["CBDW"]);
@@ -43,6 +43,7 @@ namespace UIDP.ODS.jyglDB
             sql += GetSQLStr(0,1);
             sql += GetSQLStr(d["CZWZ"],1);
             sql += GetSQLStr(d["SFCW"], 1);
+            sql += GetSQLStr(d["XMLB"]);
             sql = sql.TrimEnd(',');
             sql += ")";
             sqllist.Add(sql);
@@ -86,6 +87,7 @@ namespace UIDP.ODS.jyglDB
             sql += "IS_DELETE=" + GetSQLStr(d["IS_DELETE"],1);
             sql += "CZWZ=" + GetSQLStr(d["CZWZ"],1);
             sql += "SFCW=" + GetSQLStr(d["SFCW"],1);
+            sql += " XMLB=" + GetSQLStr(d["XMLB"]);
             sql = sql.TrimEnd(',');
             sql += " WHERE XMBH=" + GetSQLStr(d["XMBH"]);
             sql = sql.TrimEnd(',');
