@@ -162,11 +162,7 @@ namespace UIDP.ODS.jyglDB
         //    }
         //    return db.Executs(sqllist);
         //}
-        public DataTable GetOptions(string ParentCode)
-        {
-            string sql = "SELECT Code,Name from tax_dictionary where ParentCode='" + ParentCode + "'";
-            return db.GetDataTable(sql);
-        }
+
 
         public string GetSQLStr(object s,int flag=0)
         {

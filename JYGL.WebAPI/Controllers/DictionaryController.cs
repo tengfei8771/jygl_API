@@ -25,5 +25,8 @@ namespace JYGL.WebAPI.Controllers
 
         [HttpPost("delNode")]
         public IActionResult delNode([FromBody]JObject value) => Ok(TC.delNode(value.ToObject<Dictionary<string, object>>()));
+
+        [HttpGet("GetOptions")]
+        public IActionResult GetOptions(string ParentCode) => Ok(TC.GetOptions(ParentCode));
     }
 }

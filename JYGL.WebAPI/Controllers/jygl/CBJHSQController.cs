@@ -29,7 +29,6 @@ namespace JYGL.WebAPI.Controllers.jygl
         [HttpGet("DeleteDetailInfo")]
         public IActionResult DeleteDetailInfo(string WZID) => Ok(CB.DeleteDetailInfo(WZID));
 
-        [HttpGet("GetOpions")]
-        public IActionResult GetOpions(string ParentCode) => Ok(CB.GetOptions(ParentCode));
+        
     }
 }
