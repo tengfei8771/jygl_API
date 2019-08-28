@@ -6,13 +6,13 @@ using UIDP.UTILITY;
 
 namespace UIDP.ODS.jyglDB
 {
-    public class CBJHSPDB
+    public class CWCBDB
     {
         DBTool db = new DBTool("");
 
         public DataTable GetInfo(string XMBH, string XMMC)
         {
-            string sql = " SELECT * FROM jy_cbjh WHERE IS_DELETE=0";
+            string sql = " SELECT * FROM jy_cbjh WHERE IS_DELETE=0 AND SFCW=1";
             if (!string.IsNullOrEmpty(XMBH))
             {
                 sql += " AND XMBH LIKE'" + XMBH + "%'";
@@ -27,7 +27,7 @@ namespace UIDP.ODS.jyglDB
 
         public DataTable GetDetailInfo(string XMBH)
         {
-            string sql = "select * from jy_cbwz where XMBH='" + XMBH + "' AND IS_DELETE=0";
+            string sql = "select * from jy_cbwz where XMBH='" + XMBH + "' AND IS_DELETE=0 ";
             return db.GetDataTable(sql);
         }
     }

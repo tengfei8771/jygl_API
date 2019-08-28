@@ -9,14 +9,14 @@ using UIDP.BIZModule.jyglModules;
 namespace JYGL.WebAPI.Controllers.jygl
 {
     [Produces("application/json")]
-    [Route("CBWZSP")]
-    public class CBWZSPController : Controller
+    [Route("SCJSCB")]
+    public class SCJSCBController : Controller
     {
-        CBJHSPModule SP = new CBJHSPModule();
+        SCJSCBModule SCJS = new SCJSCBModule();
         [HttpGet("GetInfo")]
-        public IActionResult GetInfo(string XMBH, string XMMC, int page, int limit) => Ok(SP.GetInfo(XMBH, XMMC, page, limit));
+        public IActionResult GetInfo(string XMBH, string XMMC, int page, int limit) => Ok(SCJS.GetInfo(XMBH, XMMC, page, limit));
 
         [HttpGet("GetDetailInfo")]
-        public IActionResult GetDetailInfo(string XMBH) => Ok(SP.GetDetailInfo(XMBH));
+        public IActionResult GetDetailInfo(string XMBH) => Ok(SCJS.GetDetailInfo(XMBH));
     }
 }

@@ -6,12 +6,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using UIDP.BIZModule.jyglModules;
+using WZGX.WebAPI.Controllers;
 
 namespace JYGL.WebAPI.Controllers.jygl
 {
     [Produces("application/json")]
     [Route("CBJHSQ")]
-    public class CBJHSQController : Controller
+    public class CBJHSQController : WebApiBaseController
     {
         CBJHSQModule CB = new CBJHSQModule();
         [HttpGet("GetInfo")]

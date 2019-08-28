@@ -7,11 +7,9 @@ using UIDP.UTILITY;
 
 namespace UIDP.BIZModule.jyglModules
 {
-    public class CBJHSPModule
+    public class SCJSCBModule
     {
-
-        CBJHSPDB db = new CBJHSPDB();
-
+        SCJSCBDB db = new SCJSCBDB();
         public Dictionary<string, object> GetInfo(string XMBH, string XMMC, int page, int limit)
         {
             Dictionary<string, object> r = new Dictionary<string, object>();
