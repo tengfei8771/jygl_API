@@ -12,14 +12,14 @@ namespace UIDP.ODS.jyglDB
 
         public DataTable GetInfo(string XMBH,string XMMC)
         {
-            string sql = " SELECT * FROM jy_cbjh WHERE IS_DELETE=0";
+            string sql = " SELECT a.*,b.Name as PC FROM jy_cbjh a left join tax_dictionary b on a.XMPC=b.Code WHERE a.IS_DELETE=0";
             if (!string.IsNullOrEmpty(XMBH))
             {
-                sql += " AND XMBH LIKE'" + XMBH + "%'";
+                sql += " AND a.XMBH LIKE'" + XMBH + "%'";
             } 
             if (!string.IsNullOrEmpty(XMMC))
             {
-                sql += " AND XMMC='" + XMMC + "'";
+                sql += " AND a.XMMC='" + XMMC + "'";
             }
             //sql += " LIMIT " + (page - 1) * limit + "," + limit;
             return db.GetDataTable(sql);
@@ -162,7 +162,11 @@ namespace UIDP.ODS.jyglDB
         //    }
         //    return db.Executs(sqllist);
         //}
-
+        public DataTable GetOptions(string ParentCode)
+        {
+            string sql = "SELECT Code,Name from tax_dictionary where ParentCode='" + ParentCode + "'";
+            return db.GetDataTable(sql);
+        }
 
         public string GetSQLStr(object s,int flag=0)
         {

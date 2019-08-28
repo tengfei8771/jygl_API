@@ -176,6 +176,34 @@ namespace UIDP.BIZModule.jyglModules
             return r;
         }
 
+        public Dictionary<string, object> GetOptions(string ParentCode)
+        {
+            Dictionary<string, object> r = new Dictionary<string, object>();
+            try
+            {
+                DataTable dt = db.GetOptions(ParentCode);
+                if (dt.Rows.Count > 0)
+                {
+                    r["code"] = 2000;
+                    r["message"] = "success";
+                    r["items"] = dt;
+                    r["total"] = dt.Rows.Count;
+                }
+                else
+                {
+                    r["code"] = 2000;
+                    r["message"] = "success,but no info ";
+                    r["total"] = dt.Rows.Count;
+                }
+            }
+            catch (Exception e)
+            {
+                r["code"] = -1;
+                r["message"] = e.Message;
+            }
+            return r;
+        }
+
         public string CreateXMBH()
         {
             string timeSpan = DateTime.Now.ToString("yyyyMMdd");
