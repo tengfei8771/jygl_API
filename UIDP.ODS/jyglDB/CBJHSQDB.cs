@@ -19,7 +19,7 @@ namespace UIDP.ODS.jyglDB
             } 
             if (!string.IsNullOrEmpty(XMMC))
             {
-                sql += " AND XMBH='" + XMMC + "'";
+                sql += " AND XMMC='" + XMMC + "'";
             }
             //sql += " LIMIT " + (page - 1) * limit + "," + limit;
             return db.GetDataTable(sql);
