@@ -17,12 +17,17 @@ namespace JYGL.WebAPI.Controllers.jygl
         TravelExpenseModule TE = new TravelExpenseModule();
         [HttpGet("GetInfo")]
         public IActionResult GetInfo(string CLBH, int page, int limit) => Ok(TE.GetInfo(CLBH,page, limit));
+        [HttpGet("GetCLXCInfo")]
+        public IActionResult GetCLXCInfo(string CLBH) => Ok(TE.GetCLXCInfo(CLBH));
         [HttpPost("CreateInfo")]
         //public IActionResult CreateInfo([FromBody]JObject value,[FromBody]JArray list) => Ok(CB.CreateInfo(value.ToObject<Dictionary<string, object>>(), list.ToObject<List<Dictionary<string, object>>>()));
         public IActionResult CreateInfo([FromBody]JObject value) => Ok(TE.CreateInfo(value.ToObject<Dictionary<string, object>>()));
         [HttpPost("UpdateInfo")]
         public IActionResult UpdateInfo([FromBody]JObject value) => Ok(TE.UpdateInfo(value.ToObject<Dictionary<string, object>>()));
-        [HttpPost("DeleteInfo")]
+        [HttpGet("DeleteInfo")]
         public IActionResult DeleteInfo(string CLBH) => Ok(TE.DeleteInfo(CLBH));
+
+        [HttpGet("DeleteXCInfo")]
+        public IActionResult DeleteXCInfo(string XCID) => Ok(TE.DeleteXCInfo(XCID));
     }
 }
