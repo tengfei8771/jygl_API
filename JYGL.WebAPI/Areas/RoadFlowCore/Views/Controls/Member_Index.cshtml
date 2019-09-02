@@ -1,0 +1,265 @@
+﻿@{ 
+    bool isMobile = "1".Equals(ViewData["ismobile"].ToString());
+    bool ischangetype = "0".Equals(ViewData["ischangetype"].ToString());
+}
+<style type="text/css">
+    .SelectBorder { border: 1px solid #cccccc; padding: 3px 3px 3px 3px; }
+    body { overflow: hidden; }
+</style>
+<script type="text/javascript">
+    var win = new RoadUI.Window();
+</script>
+<table border="0" cellpadding="0" cellspacing="0" align="center" style="margin-top:4px;">
+    <tr>
+        <td valign="top">
+            <div style="margin-bottom:4px;">
+                <input type="text" class="mytext" @(ischangetype ? "disabled='disabled' " : " ") id="searchtext" placeholder="@(ischangetype ? "" : "输入关键字可查询")" style="width:@(isMobile ? "123" : "175")px;" /><input type="button" class="mybutton" @(ischangetype ? "disabled='disabled' " : " ") value="查询" style="margin-left:3px;" onclick="search();" />
+            </div>
+            <div style="margin-bottom:4px;"> 
+                <input type="radio" id="showtype_0" value="0" onclick="treecng(this.value)" checked="checked" @(ischangetype?" disabled='disabled' ":" ") name="showtype" style="vertical-align:middle;" /><label for="showtype_0" style="vertical-align:middle;">组织架构</label><input type="radio" id="showtype_1" value="1" onclick="treecng(this.value)" name="showtype" @(ischangetype?" disabled='disabled' ":" ") style="vertical-align:middle;" /><label for="showtype_1" style="vertical-align:middle;">工作组</label>
+            </div>
+            <div id="Organize" style="width:@(isMobile ? "159" : "210")px; height:@(isMobile ? "266" : "369")px; overflow:auto; border-radius: 4px;" class="SelectBorder"></div>
+        </td>
+        <td align="center" style="padding:0px 6px;" valign="middle">
+            <div style="margin-bottom:10px;"><button type="button" class="mybutton" onclick="addAll();">全选</button></div>
+            <div style="margin-bottom:10px;"><button type="button" class="mybutton" onclick="delAll();">清空</button></div>
+            <div style="margin-bottom:10px;"><button type="button" class="mybutton" onclick="add();">添加</button></div>
+            <div style="margin-bottom:10px;"><button type="button" class="mybutton" onclick="del();">删除</button></div>
+            <div style="margin-bottom:10px;"><button type="button" class="mybutton" onclick="confirm1();">确定</button></div>
+            <div><button type="button" class="mybutton" onclick="win.close();">取消</button></div>
+        </td>
+        <td valign="top">
+            <div id="SelectNote" class="SelectBorder" style="width:@(isMobile ? "100" : "200")px; height:40px; overflow:auto; margin-bottom:5px;border-radius: 4px;">
+                <span style="color:#757575;">单击已选择项可显示该项详细信息</span>
+            </div>
+            <div id="SelectDiv" style="width:@(isMobile ? "100" : "200")px; height:@(isMobile ? "264" : "367")px; overflow:auto;border-radius: 4px;" class="SelectBorder">
+                @Html.Raw(ViewData["defaultValues"])
+            </div>
+        </td>
+    </tr>
+</table>
+<script type="text/javascript">
+    var isdept = '@ViewData["isdept"]';
+    var isunit = '@ViewData["isunit"]';
+    var isstation = '@ViewData["isstation"]';
+    var isuser = '@ViewData["isuser"]';
+    var ismore = '@ViewData["ismore"]';
+    var isall = '@ViewData["isall"]';
+    var isgroup = '@ViewData["isgroup"]';
+    var onlyunit = '';
+    var isselect = "1" == "@ViewData["isselect"]";
+    var eid = '@ViewData["eid"]';
+    var rootid = '@ViewData["rootid"]';
+    var values = '@ViewData["values"]';
+    var userBefor = '@ViewData["userprefix"]';
+    var userBefor1 = '@ViewData["relationprefix"]';
+    var userWorkGroup = '@ViewData["workgroupprefix"]';
+    var ismobile = '1' == '@ViewData["ismobile"]';
+    var orgTree = null;
+    var current = null;
+    var currentDel = null;
+    var isClick = false;
+    var clickCount = 0;
+    $(function ()
+    {
+        orgTree = new RoadUI.Tree({
+            id: "Organize", path: "../Organize/Tree1?showtype=0&isall=" + isall + "&onlyunit=" + onlyunit + "&rootid=" + rootid, refreshpath: "../Organize/TreeRefresh?showtype=0",
+            onclick: click, ondblclick: dblclick, showselect: isselect
+        });
+    });
+
+    function treecng(val)
+    {
+        if (!val)
+        {
+            val = $("#showtype").val();
+        }
+        orgTree = new RoadUI.Tree({
+            id: "Organize", path: "../Organize/Tree1?showtype=" + val + "&isall=" + isall + "&onlyunit=" + onlyunit + "&rootid=" + rootid, refreshpath: "../Organize/TreeRefresh?showtype=" + val,
+            onclick: click, ondblclick: dblclick, showselect: isselect
+        });
+    }
+
+    function search()
+    {
+        var value = $.trim($("#searchtext").val());
+        var val = $("#showtype").val();
+        orgTree = new RoadUI.Tree({
+            id: "Organize", path: "../Organize/Tree1?showtype=" + val + "&isall=" + isall + "&onlyunit=" + onlyunit + "&rootid=" + rootid + "&searchword=" + encodeURIComponent(value), refreshpath: "../Organize/TreeRefresh?showtype=" + val,
+            onclick: click, ondblclick: dblclick, showselect: isselect
+        });
+    }
+
+    function click(json)
+    {
+        current = json;
+    }
+    function dblclick(json)
+    {
+        click(json);
+        add();
+    }
+    function addAll()
+    {
+        isClick = true;
+        clickCount = 0;
+        $(".tree_div", $("#Organize")).each(function ()
+        {
+            var jid = $(this).data("json");
+            if (jid)
+            {
+                current = jid;
+                add(true);
+            }
+        });
+    }
+    function delAll()
+    {
+        $("#SelectDiv").html('');
+        $("input[type='checkbox']", $("#Organize")).prop('checked', false);
+    }
+    function add(noAlert)
+    {
+        if (!noAlert)
+        {
+            isClick = true;
+            clickCount = 0;
+        }
+        if (!current)
+        {
+            if (isClick && clickCount == 0)
+            {
+                alert("没有选择要添加的项");
+                clickCount = 1;
+            }
+            return;
+        }
+
+        if (("0" == ismore || "false" == ismore.toLowerCase()) && $("#SelectDiv").children("div").size() >= 1)
+        {
+            if (isClick && clickCount == 0)
+            {
+                alert("当前设置最多只能选择一项!");
+                clickCount = 1;
+            }
+            return;
+        }
+        if (current.type == 1 && ("0" == isunit || "false" == isunit.toLowerCase()))
+        {
+            if (isClick && clickCount == 0)
+            {
+                alert("当前设置不允许选择单位!");
+                clickCount = 1;
+            }
+            return;
+        }
+        if (current.type == 2 && ("0" == isdept || "false" == isdept.toLowerCase()))
+        {
+            if (isClick && clickCount == 0)
+            {
+                alert("当前设置不允许选择部门!");
+                clickCount = 1;
+            }
+            return;
+        }
+        if (current.type == 3 && ("0" == isstation || "false" == isstation.toLowerCase()))
+        {
+            if (isClick && clickCount == 0)
+            {
+                alert("当前设置不允许选择岗位!");
+                clickCount = 1;
+            }
+            return;
+        }
+        if ((current.type == 4 || current.type == 6) && ("0" == isuser || "false" == isuser.toLowerCase()))
+        {
+            if (isClick && clickCount == 0)
+            {
+                alert("当前设置不允许选择人员!");
+                clickCount = 1;
+            }
+            return;
+        }
+        if (current.type == 5 && ("0" == isgroup || "false" == isgroup.toLowerCase()))
+        {
+            if (isClick && clickCount == 0)
+            {
+                alert("当前设置不允许选择工作组!");
+                clickCount = 1;
+            }
+            return;
+        }
+
+        if ($("#SelectDiv div[value$='" + current.id + "']").size() > 0)
+        {
+            if (isClick && clickCount == 0)
+            {
+                alert(current.title.removeHtml() + "已经选择了!");
+                clickCount = 1;
+            }
+            return;
+        }
+        var value = current.id;
+        if (current.type == 4)
+        {
+            value = userBefor + value;
+        }
+        else if (current.type == 6)
+        {
+            value = userBefor1 + value;
+        }
+        else if (current.type == 5)
+        {
+            value = userWorkGroup + value;
+        }
+        $("#SelectDiv").append('<div onclick="currentDel=this;showinfo(\'' + value + '\');" class="selectorDiv" ondblclick="currentDel=this;del();" value="' + value + '">' + current.title + '</div>');
+    }
+    function showinfo(id)
+    {
+        $.ajax({
+            url: 'Member_GetNote?id=' + id, async: true, cache: true, success: function (txt)
+            {
+                $("#SelectNote").html(txt);
+            }
+        });
+    }
+    function del()
+    {
+        if (!currentDel)
+        {
+            alert("没有选择要删除的项");
+        }
+        $(currentDel).remove();
+        $("input[type='checkbox'][value='" + $(currentDel).attr("value").replace('u_', "").replace('w_', '') + "']", $("#Organize")).prop('checked', false);
+        window.setTimeout('$("#SelectNote").html(\'<span style="color:#ccc;">单击已选择项可显示该项详细信息</span>\')', 1);
+    }
+    function confirm1()
+    {
+        var value = [];
+        var title = [];
+        var objs = $("#SelectDiv div");
+        for (var i = 0; i < objs.size(); i++)
+        {
+            value.push(objs.eq(i).attr("value"));
+            title.push(objs.eq(i).text());
+        }
+
+        var ele = win.getOpenerElement(eid);
+        var ele1 = win.getOpenerElement(eid + "_text");
+        if (ele != null && ele.size() > 0) {
+            ele.val(value.join(','));
+        }
+        if (ele1 != null && ele1.size() > 0)
+        {
+            ele1.val(title.join(','));
+            if (ele1.attr("onchange"))
+            {
+                try {
+                    ele1.change();
+                } catch (e) {
+                }
+            }
+        }
+        win.close();
+    }
+</script>

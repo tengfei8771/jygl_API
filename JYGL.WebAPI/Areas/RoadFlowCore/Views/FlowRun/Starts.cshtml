@@ -1,0 +1,47 @@
+﻿@model IEnumerable<RoadFlow.Model.FlowRun>
+@using RoadFlow.Utility;
+@{ 
+    var dict = new RoadFlow.Business.Dictionary();
+    string rootId = dict.GetIdByCode("system_applibrarytype_flow").ToString();
+}
+<div style="height:20px;"></div>
+@foreach (var flow in Model.GroupBy(p=>p.Type).OrderBy(p=>p.Key))
+{
+<div class="" style="width:97%; margin:0 auto;">
+    <div>
+        <div class='startflowtype'>@(dict.GetAllParentTitle(flow.Key, true, false, rootId, false))</div>
+        <div style="clear:both;"></div>
+        <div style="padding-top:10px; float:left; font-weight:bold;"></div>
+        <div style="padding-top:10px; float:left; margin:0">
+            @foreach (var f in flow)
+            {
+                string bgcolor = f.Color.IsNullOrWhiteSpace() ? "" : f.Color;
+                string ico = f.Ico.IsNullOrEmpty() ? "fa-pencil-square-o" : f.Ico;
+                <a class="startflowlink" href="javascript:void(0);" onclick="top.openApp('/RoadFlowCore/FlowRun/Index?flowid=@f.Id.ToUpperString()',0,'@f.Name','');">
+                    <div class="startflowdiv" style="@(bgcolor.IsNullOrWhiteSpace()?"":"background:"+bgcolor+";")">
+                        <div>
+                            <div class="startflowdivico">
+                                @if (ico.IsFontIco())
+                                {
+                                    <div class="fa @ico" style="font-size:28px; padding-top:6px;"></div>
+                                }
+                                else
+                                {
+                                    <div style="margin-left:15px; padding-top:3px;"><img src="@ico" border="0" style="vertical-align:middle;" /></div>
+                                }
+                            </div>
+                        </div>
+                        <div class="startflowdivtext">
+                            <div class="startflowdivtextbg"></div>
+                            <div class="startflowdivtextword" >@f.Name.CutOut(16)</div>
+                        </div>
+                    </div>
+                </a>
+            }
+        </div>
+    </div>
+</div>
+<div style="clear:both;"></div>
+}
+
+

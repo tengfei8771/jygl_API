@@ -1,0 +1,216 @@
+﻿@using RoadFlow.Utility
+@{
+    bool isMobile = "1".Equals(ViewData["ismobile"].ToString());
+}
+<script>
+    RoadUI.Core.showWait();
+</script>
+<style type="text/css">
+    body { overflow: hidden; background:#fff; }
+</style>
+<div>
+    <form id="mainform" name="mainform" method="post" target="submiter">
+        <input type="hidden" name="instanceid" id="instanceid" value="" />
+        <!--保存处理参数JSON，提交到form-->
+        <input type="hidden" name="params" id="params" value="" />
+        <!--签批按钮-->
+        @{
+            var stepButtons = (List<RoadFlow.Model.FlowButton>)ViewData["flowButtons"];
+        }
+        @if (stepButtons.Count > 0)
+        {
+            if (isMobile)//移动端按钮
+            {
+            int buttonCount = 0;
+            <div class="mobiletoolbar" id="mobiletoolbardiv">
+                @foreach (var button in stepButtons)
+                {
+                    @if (!button.Id.IsEmptyGuid())
+                    {
+                        buttonCount++;
+                        <div class="mobiletoolbarbut">
+                            <a class="mobiletoolbarbuta" href="javascript:void(0);" onclick="fun_@(button.Id.ToString("N"))(this);" title="@button.Note">
+                                @if (button.Ico.IsFontIco())
+                                {
+                                    <p><i class='fa @button.Ico'></i></p>
+                                    <p><label>@button.Title</label></p>
+                                }
+                                else
+                                {
+                                    <p><img src="@Url.Content("~" + button.Ico)" /></p>
+                                    <p title="@button.Title"><label>@button.Title</label></p>
+                                }
+                            </a>
+                            <script type="text/javascript">
+                                    function fun_@(button.Id.ToString("N"))(a) { @Html.Raw(button.Script) }
+                            </script>
+                        </div>
+                    }
+                }
+            </div>
+            }
+            else
+            {
+            <div class="toolbar" id="toolbardiv" style="margin:0 auto; border-top:none 0; position:fixed; top:0; left:0; right:0; z-index:999; width:100%;">
+                <div>
+                    @foreach (var button in stepButtons)
+                    {
+                        @if (!button.Id.IsEmptyGuid())
+                        {
+                            <a href="javascript:void(0);" onclick="fun_@(button.Id.ToString("N"))(this);" title="@button.Note">
+                                @if (button.Ico.IsFontIco())
+                                {
+                                    <i class='fa @button.Ico' style='font-size:14px;margin-right:3px;'></i><label>@button.Title</label>
+                                }
+                                else
+                                {
+                                    <span style='@(!button.Ico.IsNullOrWhiteSpace() ? "background:url(" + Url.Content("~" + button.Ico) + ") no-repeat left center;" : "")'>@button.Title</span>
+                                }
+                            </a>
+                            <script type="text/javascript">
+                                function fun_@(button.Id.ToString("N"))(a) { @Html.Raw(button.Script) }
+                            </script>
+                        }
+                        else
+                        {
+                            <span class="toolbarsplit">&nbsp;</span>
+                        }
+                    }
+                </div>
+            </div>
+            }
+        }
+        <!--签批按钮-->
+        <!--签批意见栏-->
+        @if (!"0".Equals(ViewData["signType"].ToString()) && !"1".Equals(ViewData["display"]))
+        {
+            <div class="toolbar" id="commentDiv" style="margin-top:0; position:fixed; top:@(isMobile?"45":"35")px; height:40px; left:0; right:0; z-index:999; width:100%;">
+                <div style="padding:3px 0 0 5px;">
+                    意见：<select class="myselect" id="mycomment" style="width:@(isMobile?"60":"100")px;" onchange="$('#comment').val(this.value);">
+                        <option value=""></option>
+                        @Html.Raw(ViewData["commentOptions"])
+                    </select>
+                    <input type="text" class="mytext" id="comment" name="comment" value="@ViewData["comments"]" style="width:@(isMobile?"20":"45")%;" />
+                    @if ("1".Equals(ViewData["attachment"].ToString()))
+                    {
+                        <input type="text" class="myfile" id="attachment" name="attachment" value="@ViewData["uploadAttachment"]" style="width:@(isMobile?"60":"120")px;" />
+                    }
+                    @if ("2".Equals(ViewData["signType"].ToString()))
+                    {
+                        <input type="hidden" value="" id="issign" name="issign" />
+                        <input type="button" class="mybutton" id="signbutton" onclick="sign();" value="&nbsp;&nbsp;签&nbsp;&nbsp;章&nbsp;&nbsp;" />
+                        <img alt="" src="@Html.Raw(ViewData["signSrc"])" id="signimg" style="vertical-align:bottom; display:none; max-height:28px;" />
+                    }
+                </div>
+            </div>
+            <div style="height: 43px;"></div>
+        }
+        <!--签批意见栏-->
+        <!--调试窗口-->
+        @if (!"1".Equals(ViewData["display"].ToString()) && "1".Equals(ViewData["isDebug"].ToString()))
+        {
+            <iframe name="submiter" style="width:98%; height:200px; border:1px dashed #ccc; margin:5px auto 0 10px; overflow:auto;"></iframe>
+        }
+        else
+        {
+            <iframe name="submiter" style="height:1px; display:none;"></iframe>
+        }
+        <!--调试窗口-->
+        <!--表单主体-->
+            <div style="overflow:auto;" id="form_body_div">
+                <!--表单-->
+                @if (!string.IsNullOrWhiteSpace(ViewData["formUrl"].ToString()))
+                {
+                    if ("1".Equals(ViewData["isCustomeForm"].ToString()))
+                    {
+                        <input type="hidden" id="form_iscustomeform" name="form_iscustomeform" value="1" />
+                        <input type="hidden" name="customformtitle" id="customformtitle" value="" />
+                        <iframe src="@Html.Raw(ViewData["formUrl"])" onload="setIframeHeight();" id="customeformiframe" name="customeformiframe" frameborder="0" border="0" style="border:none 0;padding:0;width:100%;margin-top:10px;"></iframe>
+                    }
+                    else
+                    {
+                        <input type="hidden" id="form_iscustomeform" name="form_iscustomeform" value="0" />
+                        await Html.RenderPartialAsync(ViewData["formUrl"].ToString());
+                    }
+                }
+                else //如果表单为空，也要在这里放一个HIDDEN，不然发送去会去保存数据，会报错
+                {
+                    <input type="hidden" id="form_iscustomeform" name="form_iscustomeform" value="1" />
+                }
+                <!--表单-->
+                <!--如果是加签显示加签说明-->
+                @if (false)
+                {
+                    <div style="text-align: center; font-weight: bold; color: red;"></div>
+                }
+
+                <!--历史意见显示-->
+                @if ("1".Equals(ViewData["showComment"].ToString()))
+                {
+                    <div id="form_commentlist_div" style="width:95%; margin:0 auto;">
+                        @{
+                            await Html.RenderPartialAsync("Comments.cshtml");
+                        }
+                    </div>
+                }
+                <!--历史意见显示-->
+                <br />
+            </div>
+        <!--表单主体-->
+        <!--归档内容-->
+        <textarea id="form_body_div_textarea" name="form_body_div_textarea" style="display:none;"></textarea>
+        <textarea id="form_commentlist_div_textarea" name="form_commentlist_div_textarea" style="display:none;"></textarea>
+        <!--归档内容-->
+    </form>
+</div>
+<script type="text/javascript">
+    var isDebug = '@ViewData["isDebug"]' === '1' && "@ViewData["display"]" !== '1';
+    var isSign = '0' !== '@ViewData["signType"]';
+    var signType = '@ViewData["signType"]';
+    var iframeid = '@ViewData["tabId"]';
+    var isShow = "1" === "@ViewData["display"]";//是否是查看模式
+    var appid = '@ViewData["appId"]';
+    var query = '@Html.Raw(ViewData["query"])';
+    var isSystemDetermine = '0' === '@ViewData["flowType"]';//当前步骤的后续流转类型是否是系统判断
+    var instanceid = '@ViewData["instanceId"]';
+    var isCustomeForm = '1' === '@ViewData["isCustomeForm"]';
+    var isMobile = "1" === "@ViewData["ismobile"]";//是否是移动端
+
+    if ("1" === "@ViewData["isArchives"]") {
+        //$("#form_body_div_textarea").val($("#form_body_div").html());
+    }
+
+    $(window).load(function () {
+        if ("1" === "@ViewData["isArchives"]") {
+            $("#form_commentlist_div_textarea").val($("#form_commentlist_div").html());
+        }
+        //在工具栏下方插入一个等高的DIV，不然看不到部分表单内容
+        toolbarHeight = isMobile ? $("#mobiletoolbardiv").outerHeight(true) : $("#toolbardiv").outerHeight(true);
+        (isMobile ? $("#mobiletoolbardiv") : $("#toolbardiv")).after('<div style="height:' + (toolbarHeight || 0).toString() + 'px;"></div>');
+        bodyHeight = $(window).height() - toolbarHeight - $("#commentDiv").outerHeight(true) - (isDebug ? 200 : 0);
+        if (!isCustomeForm) {
+            $("#form_body_div").height(bodyHeight);
+        }
+        //关闭弹出的正在加载层
+        RoadUI.Core.closeWait();
+    });
+    function setIframeHeight(height) {
+        try {
+            var iframe = document.getElementById("customeformiframe");
+            if (!height) {
+                if (iframe.attachEvent) {
+                    height = iframe.contentWindow.document.documentElement.scrollHeight + 2;
+                } else {
+                    height = iframe.contentDocument.body.scrollHeight + 2;
+                }
+            }
+            iframe.height = height;
+        } catch (e) {
+            
+        }
+        toolbarHeight = isMobile ? $("#mobiletoolbardiv").outerHeight(true) : $("#toolbardiv").outerHeight(true);
+        bodyHeight = $(window).height() - toolbarHeight - $("#commentDiv").outerHeight(true) - (isDebug ? 200 : 0);
+        $("#form_body_div").height(bodyHeight);
+    }
+</script>
+<script type="text/javascript" src="~/RoadFlowResources/scripts/flowRun/common.js"></script>
