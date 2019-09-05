@@ -25,6 +25,9 @@ namespace UIDP.BIZModule.jyglModel
         public string BJR { get; set; }
         public DateTime BJSJ { get; set; }
         public int IS_DELETE { get; set; }
+        public string XMBH { get; set; }
+        public string XMMC { get; set; }
+        public string DWMC { get; set; }
         public List<CLXCModel> XCList { get; set; }
     }
 }

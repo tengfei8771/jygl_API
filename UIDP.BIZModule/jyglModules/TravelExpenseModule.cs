@@ -137,7 +137,19 @@ namespace UIDP.BIZModule.jyglModules
                 {
                     model.IS_DELETE = Convert.ToInt32(dr["IS_DELETE"]);
                 }
-                
+                if (!IsNull(dr["XMBH"]))
+                {
+                    model.XMBH = dr["XMBH"].ToString();
+                }
+                if (!IsNull(dr["XMMC"]))
+                {
+                    model.XMMC = dr["XMMC"].ToString();
+                }
+                if (!IsNull(dr["DWMC"]))
+                {
+                    model.DWMC = dr["DWMC"].ToString();
+                }
+
                 model.XCList = new List<CLXCModel>();
                 GetCLXCList(model, dt1);
             }
