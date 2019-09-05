@@ -30,11 +30,13 @@ namespace UIDP.ODS.jyglDB
         public string CreateInfo(Dictionary<string,object> d)
         {
             List<string> sqllist = new List<string>();
-            string sql = "INSERT INTO jy_fybx (S_ID,BXDH,DWBM,FYXM,SQSJ,BXSY,BXJEDX,BXJE,YJKJE,XFKJE,FKFS,FJZS,SKDW,KHH,YHZH,SPZT,CJR,CJSJ,IS_DELETE)values(";
+            string sql = "INSERT INTO jy_fybx (S_ID,BXDH,DWBM,S_OrgCode,FYXM,XMBH,SQSJ,BXSY,BXJEDX,BXJE,YJKJE,XFKJE,FKFS,FJZS,SKDW,KHH,YHZH,SPZT,CJR,CJSJ,IS_DELETE)values(";
             sql += GetSQLStr(Guid.NewGuid().ToString());
             sql += GetSQLStr(d["BXDH"]);
             sql += GetSQLStr(d["DWBM"]);
+            sql += GetSQLStr(d["S_OrgCode"]);
             sql += GetSQLStr(d["FYXM"]);
+            sql += GetSQLStr(d["XMBH"]);
             sql += GetSQLStr(d["SQSJ"]);
             sql += GetSQLStr(d["BXSY"]);
             sql += GetSQLStr(d["BXJEDX"]);
@@ -59,6 +61,8 @@ namespace UIDP.ODS.jyglDB
         {
             string sql = " UPDATE jy_fybx SET BXDH=" + GetSQLStr(d["BXDH"]);
             sql += "DWBM=" + GetSQLStr(d["DWBM"]);
+            sql += "S_OrgCode=" + GetSQLStr(d["S_OrgCode"]);
+            sql += "XMBH=" + GetSQLStr(d["XMBH"]);
             sql += "FYXM=" + GetSQLStr(d["FYXM"]);
             sql += "SQSJ=" + GetSQLStr(d["SQSJ"]);
             sql += "BXSY=" + GetSQLStr(d["BXSY"]);
