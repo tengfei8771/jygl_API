@@ -148,9 +148,7 @@ namespace UIDP.BIZModule.jyglModules
         {
             foreach(DataRow dr in dt.Rows)
             {
-                CLXCModel XVXC = new CLXCModel();
-                
-                
+                CLXCModel XVXC = new CLXCModel();  
                 if (!IsNull(dr["XCID"]))
                 {
                     XVXC.XCID = dr["XCID"].ToString();

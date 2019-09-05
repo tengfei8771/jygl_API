@@ -34,7 +34,7 @@ namespace UIDP.ODS.jyglDB
         public string CreateInfo(Dictionary<string,object> d)
         {
             List<string> sqllist = new List<string>();
-            string sql = " INSERT INTO jy_clbx (CLBH,DWBM,CCXM,CCSY,CCKSSJ,CCJSSJ,CCTS,HJJE,HJDX,YJCLF,YTBJE,REMARK,SKRXM,CJR,CJSJ,IS_DELETE) VALUES (";
+            string sql = " INSERT INTO jy_clbx (CLBH,DWBM,CCXM,CCSY,CCKSSJ,CCJSSJ,CCTS,HJJE,HJDX,YJCLF,YTBJE,REMARK,SKRXM,CJR,CJSJ,IS_DELETE,XMBH,XMMC) VALUES (";
             sql += GetSQLStr(d["CLBH"]);
             sql += GetSQLStr(d["DWBM"]);
             sql += GetSQLStr(d["CCXM"]);
@@ -51,6 +51,8 @@ namespace UIDP.ODS.jyglDB
             sql += GetSQLStr(d["userId"]);
             sql += GetSQLStr(DateTime.Now);
             sql += GetSQLStr("0",1);
+            sql += GetSQLStr(d["XMBH"]);
+            sql += GetSQLStr(d["XMMC"]);
             sql = sql.TrimEnd(',');
             sql += ")";
             sqllist.Add(sql);
@@ -111,6 +113,8 @@ namespace UIDP.ODS.jyglDB
             sql += "BJR=" + GetSQLStr(d["userId"]);
             sql += "BJSJ=" + GetSQLStr(DateTime.Now);
             sql += "IS_DELETE=" + GetSQLStr(d["IS_DELETE"],1);
+            sql += "XMBH=" + GetSQLStr(d["XMBH"]);
+            sql += "XMMC=" + GetSQLStr(d["XMMC"]);
             sql = sql.TrimEnd(',');
             sql += " WHERE CLBH='" + d["CLBH"] + "'";
             sqllist.Add(sql);
