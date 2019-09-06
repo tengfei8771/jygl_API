@@ -12,10 +12,10 @@ namespace UIDP.ODS.jyglDB
 
         public DataTable GetInfo(string XMBH,string XMMC)
         {
-            string sql = " SELECT a.*,b.Name as PC FROM jy_cbjh a left join tax_dictionary b on a.XMPC=b.Code WHERE a.IS_DELETE=0";
+            string sql = " SELECT a.*,b.Name as PC ,c.Name as LB FROM jy_cbjh a left join tax_dictionary b on a.XMPC=b.Code left join tax_dictionary c on c.Code=a.XMLB WHERE a.IS_DELETE=0";
             if (!string.IsNullOrEmpty(XMBH))
             {
-                sql += " AND a.XMBH LIKE'" + XMBH + "%'";
+                sql += " AND a.XMCODE LIKE'" + XMBH + "%'";
             } 
             if (!string.IsNullOrEmpty(XMMC))
             {
@@ -28,7 +28,7 @@ namespace UIDP.ODS.jyglDB
         public string CreateInfo(Dictionary<string,object> d,List<Dictionary<string,object>> list,string XMBH)
         {
             List<string> sqllist = new List<string>();
-            string sql = "INSERT INTO jy_cbjh (XMBH,XMMC,CBDW,JSNR,JHZJE,LSJE,BNJE,WLJE,XMPC,CJR,CJSJ,IS_DELETE,CZWZ,SFCW,XMLB)values(";
+            string sql = "INSERT INTO jy_cbjh (XMBH,XMMC,CBDW,JSNR,JHZJE,LSJE,BNJE,WLJE,XMPC,CJR,CJSJ,IS_DELETE,CZWZ,SFCW,XMLB,HASINCOME,XMCODE,JHND)values(";
             sql += GetSQLStr(XMBH);
             sql += GetSQLStr(d["XMMC"]);
             sql += GetSQLStr(d["CBDW"]);
@@ -44,6 +44,9 @@ namespace UIDP.ODS.jyglDB
             sql += GetSQLStr(d["CZWZ"],1);
             sql += GetSQLStr(d["SFCW"], 1);
             sql += GetSQLStr(d["XMLB"]);
+            sql += GetSQLStr(d["HASINCOME"],1);
+            sql += GetSQLStr(d["XMCODE"]);
+            sql += GetSQLStr(d["JHND"]);
             sql = sql.TrimEnd(',');
             sql += ")";
             sqllist.Add(sql);
@@ -88,6 +91,9 @@ namespace UIDP.ODS.jyglDB
             sql += "CZWZ=" + GetSQLStr(d["CZWZ"],1);
             sql += "SFCW=" + GetSQLStr(d["SFCW"],1);
             sql += " XMLB=" + GetSQLStr(d["XMLB"]);
+            sql += "HASINCOME=" + GetSQLStr(d["HASINCOME"], 1);
+            sql += " XMCODE=" + GetSQLStr(d["XMCODE"]);
+            sql += " JHND=" + GetSQLStr(d["JHND"]);
             sql = sql.TrimEnd(',');
             sql += " WHERE XMBH=" + GetSQLStr(d["XMBH"]);
             sql = sql.TrimEnd(',');
@@ -142,26 +148,18 @@ namespace UIDP.ODS.jyglDB
             return db.ExecutByStringResult(sql);
         }
 
-        //public string CreateDetailInfo(List<Dictionary<string,object>> list)
-        //{
-        //    List<string> sqllist = new List<string>();
-        //    string XMBH = string.Empty;
-        //    foreach(Dictionary<string,object> d in list)
-        //    {
-        //        string sql = "INSERT INTO jy_cbwz (WZID,XMBH,WZMC,WZSL,WZLX,WZSM,IS_DELETE) VALUES(";
-        //        sql += GetSQLStr(Guid.NewGuid());
-        //        sql += GetSQLStr(XMBH);
-        //        sql += GetSQLStr(d["WZMC"]);
-        //        sql += GetSQLStr(d["WZSL"], 1);
-        //        sql += GetSQLStr(d["WZLX"]);
-        //        sql += GetSQLStr(d["WZSM"]);
-        //        sql += GetSQLStr(d["IS_DELETE"],1);
-        //        sql = sql.TrimEnd(',');
-        //        sql += ")";
-        //        sqllist.Add(sql);
-        //    }
-        //    return db.Executs(sqllist);
-        //}
+        public DataTable GetNodedt()
+        {
+            string sql = "select * from tax_dictionary";
+            return db.GetDataTable(sql);
+
+        }
+
+        public DataTable GetYearProject()
+        {
+            string sql = "select XMMC,XMCODE from jy_cbjh where YEAR(JHND)='" + DateTime.Now.Year + "'";
+            return db.GetDataTable(sql);
+        }
 
 
         public string GetSQLStr(object s,int flag=0)

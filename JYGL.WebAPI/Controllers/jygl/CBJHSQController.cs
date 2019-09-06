@@ -29,6 +29,15 @@ namespace JYGL.WebAPI.Controllers.jygl
         [HttpGet("DeleteDetailInfo")]
         public IActionResult DeleteDetailInfo(string WZID) => Ok(CB.DeleteDetailInfo(WZID));
 
-        
+        [HttpGet("GetTreeOptions")]
+        public IActionResult GetTreeOptions(string code) => Ok(CB.GetTreeOptions(code));
+
+        [HttpGet("GetYearProject")]
+        public IActionResult GetYearProject() => Ok(CB.GetYearProject());
+
+
+
+
+
     }
 }

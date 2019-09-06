@@ -198,8 +198,7 @@ namespace UIDP.BIZModule.jyglModules
                 {
                     XVXC.BFB = dr["BFB"].ToString();
                 }
-
-                
+  
                 if (!IsNull(dr["TS"]))
                 {
                     XVXC.TS = Convert.ToInt32(dr["TS"]);
