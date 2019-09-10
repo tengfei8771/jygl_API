@@ -174,6 +174,11 @@ where a.ISDELETE='1' order by ORG_CODE";
             string sql = "select * FROM ts_uidp_org";
             return db.GetDataTable(sql);
         }
+        public DataTable getOrgUser()
+        {
+            string sql = "select * FROM ts_uidp_org_user";
+            return db.GetDataTable(sql);
+        }
         /// <summary>
         /// 清空用户组织机构
         /// </summary>

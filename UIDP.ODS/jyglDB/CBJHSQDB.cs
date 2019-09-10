@@ -161,6 +161,7 @@ namespace UIDP.ODS.jyglDB
             return db.GetDataTable(sql);
         }
 
+        //根据报销金额更新
 
         public string GetSQLStr(object s,int flag=0)
         {

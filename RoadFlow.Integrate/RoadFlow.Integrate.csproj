@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\UIDP.ODS\UIDP.ODS.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="RoadFlow.Cache">
+      <HintPath>..\..\..\roadflow\RoadFlow.Mvc\bin\Debug\netcoreapp2.1\RoadFlow.Cache.dll</HintPath>
+    </Reference>
+    <Reference Include="RoadFlow.Data">
+      <HintPath>..\..\..\roadflow\RoadFlow.Mvc\bin\Debug\netcoreapp2.1\RoadFlow.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="RoadFlow.Model">
+      <HintPath>..\..\..\roadflow\RoadFlow.Mvc\bin\Debug\netcoreapp2.1\RoadFlow.Model.dll</HintPath>
+    </Reference>
+    <Reference Include="RoadFlow.Utility">
+      <HintPath>..\..\..\roadflow\RoadFlow.Mvc\bin\Debug\netcoreapp2.1\RoadFlow.Utility.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

@@ -881,6 +881,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\RoadFlow.Integrate\RoadFlow.Integrate.csproj" />
     <ProjectReference Include="..\UIDP.BIZModule\UIDP.BIZModule.csproj" />
     <ProjectReference Include="..\UIDP.LOG\UIDP.LOG\UIDP.LOG.csproj" />
   </ItemGroup>
@@ -890,25 +891,22 @@
       <HintPath>bin\Debug\netcoreapp2.1\RoadFlow.Business.dll</HintPath>
     </Reference>
     <Reference Include="RoadFlow.Cache">
-      <HintPath>bin\Debug\netcoreapp2.1\RoadFlow.Cache.dll</HintPath>
+      <HintPath>..\..\..\roadflow\RoadFlow.Mvc\bin\Debug\netcoreapp2.1\RoadFlow.Cache.dll</HintPath>
     </Reference>
     <Reference Include="RoadFlow.Data">
-      <HintPath>bin\Debug\netcoreapp2.1\RoadFlow.Data.dll</HintPath>
-    </Reference>
-    <Reference Include="RoadFlow.Integrate">
-      <HintPath>bin\Debug\netcoreapp2.1\RoadFlow.Integrate.dll</HintPath>
+      <HintPath>..\..\..\roadflow\RoadFlow.Mvc\bin\Debug\netcoreapp2.1\RoadFlow.Data.dll</HintPath>
     </Reference>
     <Reference Include="RoadFlow.Mapper">
       <HintPath>bin\Debug\netcoreapp2.1\RoadFlow.Mapper.dll</HintPath>
     </Reference>
     <Reference Include="RoadFlow.Model">
-      <HintPath>bin\Debug\netcoreapp2.1\RoadFlow.Model.dll</HintPath>
+      <HintPath>..\..\..\roadflow\RoadFlow.Mvc\bin\Debug\netcoreapp2.1\RoadFlow.Model.dll</HintPath>
     </Reference>
     <Reference Include="RoadFlow.Pinyin">
       <HintPath>bin\Debug\netcoreapp2.1\RoadFlow.Pinyin.dll</HintPath>
     </Reference>
     <Reference Include="RoadFlow.Utility">
-      <HintPath>bin\Debug\netcoreapp2.1\RoadFlow.Utility.dll</HintPath>
+      <HintPath>..\..\..\roadflow\RoadFlow.Mvc\bin\Debug\netcoreapp2.1\RoadFlow.Utility.dll</HintPath>
     </Reference>
   </ItemGroup>
 

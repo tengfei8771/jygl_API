@@ -118,6 +118,7 @@ namespace WZGX.WebAPI.Controllers
                     {
                         level = 2;
                     }
+                    HttpContext.Session.SetString("UserId", userId);
                     log.Info(DateTime.Now, userId, userName, Extension.GetClientUserIp(Request.HttpContext), 2, "LogIn", "", level);
                     return Json(new
                     {

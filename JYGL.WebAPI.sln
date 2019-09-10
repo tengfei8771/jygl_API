@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UIDP.ODS", "UIDP.ODS\UIDP.O
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UIDP.Security", "UIDP.Security\UIDP.Security\UIDP.Security.csproj", "{E5478596-3163-465A-BAD3-AD04A90E3894}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoadFlow.Integrate", "RoadFlow.Integrate\RoadFlow.Integrate.csproj", "{61421072-5AE2-4321-9BB4-E5D73EAEE46B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{E5478596-3163-465A-BAD3-AD04A90E3894}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E5478596-3163-465A-BAD3-AD04A90E3894}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E5478596-3163-465A-BAD3-AD04A90E3894}.Release|Any CPU.Build.0 = Release|Any CPU
+		{61421072-5AE2-4321-9BB4-E5D73EAEE46B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61421072-5AE2-4321-9BB4-E5D73EAEE46B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61421072-5AE2-4321-9BB4-E5D73EAEE46B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61421072-5AE2-4321-9BB4-E5D73EAEE46B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

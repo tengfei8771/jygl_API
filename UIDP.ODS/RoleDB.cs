@@ -93,6 +93,12 @@ namespace UIDP.ODS
             string sql = " select * from ts_uidp_groupinfo ";
             return db.GetDataTable(sql);
         }
+
+        public DataTable GetRoleUserOrg()
+        {
+            string sql = " select a.GROUP_ID,a.USER_ID,b.ORG_ID from ts_uidp_group_user a left join ts_uidp_org_user b on a.USER_ID=b.USER_ID";
+            return db.GetDataTable(sql);
+        }
         /// <summary>
         /// 分配角色给用户
         /// </summary>
