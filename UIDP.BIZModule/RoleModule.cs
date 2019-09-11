@@ -44,7 +44,7 @@ namespace UIDP.BIZModule
         /// <returns></returns>
         public string createRoleArticle(Dictionary<string, object> d)
         {
-            d["id"] = CreateId(28);
+            d["id"] = Guid.NewGuid().ToString();
             return db.createRoleArticle(d);
         }
         /// <summary>

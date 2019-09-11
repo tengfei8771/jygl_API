@@ -29,7 +29,7 @@
             mouseout: null, //mouseout事件函数
             dblclickclose: true //是否可以双击关闭
         };
-        
+
         this.opts = $.extend(defaults, options);
         this.opts.opener = this.getOpener();
         this.opts.id = this.getID();
@@ -37,13 +37,13 @@
         if ($opener == null || $opener.size() == 0) {
             throw "父窗口为空!";
         }
-        
+
         var $openerBody = $(this.opts.opener.document.body);
         var $openerDocument = $(this.opts.opener.document);
         if ($openerBody == null || $openerBody.size() == 0) {
             throw "父窗口body为空!";
         }
-        
+
         if (this.opts.settopwindow) {
             try {
                 top.roadflowCurrentWindow = this.opts.opener;
@@ -62,7 +62,7 @@
             $openerBody.append($maskdiv);
             $maskdiv.show();
         }
-        
+
         var $maindiv = $('<div id="' + this.opts.id + '" class="window_maindiv" style="left:' + this.opts.left + 'px;top:' + this.opts.top + 'px;width:' + this.opts.width + 'px;height:' + this.opts.height + 'px;z-index:' + this.opts.zindex + ';"></div>', $openerDocument);
         var $titlediv = $('<div id="' + this.opts.id + '_titlediv" class="window_title"></div>', $openerDocument);
         var $dragdiv = $('<div id="' + this.opts.id + '_dragdiv" style="position:absolute;left:0px;top:26px;height:' + (this.opts.height).toString() + 'px;display:none;width:' + (this.opts.width).toString() + 'px;background:#f6f6f6;filter:alpha(opacity=30);-khtml-opacity:0.3;-moz-opacity:.3;opacity:0.3;"></div>', $openerDocument);
@@ -78,7 +78,7 @@
         }
         //双击关闭窗口
         if (this.opts.dblclickclose) {
-            $titlediv_title.bind("dblclick", function () { instance.close($(this).parent().parent().attr("id"), true); });
+           // $titlediv_title.bind("dblclick", function () { instance.close($(this).parent().parent().attr("id"), true); });
         }
 
         var $titlediv_button = $();
@@ -260,43 +260,12 @@
     };
     function closeWindow(id, fromInstance) {
         var amount = 0;
-        //var $maindiv = !id || id.trim().length == 0 ? $("div[id^='roadui_window_']", top.document) : $("#" + id, top.document);
-        //for (var x = 0; x < $maindiv.size(); x++) {
-        //    try {
-        //        $iframes = $maindiv.eq(x).find("iframe");
-        //        $iframes.each(function () {
-        //            ifrm = $(this).get(0);
-        //            ifrm.src = "";
-        //            if (fromInstance) {
-        //                ifrm.contentWindow.document.write('');
-        //                //ifrm.contentWindow.document.clear();
-        //                //ifrm.contentWindow.close();
-        //            }
-        //        });
-
-        //        $("#" + $maindiv.eq(x).attr("id") + "_maskdiv", top.document).remove();
-        //        $iframes.remove();
-        //        $maindiv.eq(x).remove();
-        //    } catch (e) { }
-        //    amount++;
-        //}
-        
-        //if (amount > 0) {
-        //    if (document.all) {
-        //        //由于IE8下关闭iframe会引起字体图标不显示，这里重新加载CSS
-        //        try {
-        //            $("#style_fontawesome", top.document).attr("href", "/RoadFlowResources/scripts/font-awesome-4.7.0/css/font-awesome.min.css?v=" + RoadUI.Core.newid(false));
-        //        } catch (e) { }
-        //        try {
-        //            CollectGarbage();
-        //        } catch (e) { }
-        //    }
-        //    return amount;
-        //}
+       
         iframesArray = [];
-        //addIframe(top.document);
+       
         iframesArray.push(parent);
         iframesArray.push(window);
+        addIframe(parent.document);
         for (var i = 0; i < iframesArray.length; i++) {
             try {
                 if (!iframesArray[i].contentWindow || !iframesArray[i].contentWindow.document || iframesArray[i].contentWindow.document == null) {
@@ -305,13 +274,13 @@
             } catch (e) {
                 continue;
             }
-            
+
             var $maindiv1 = null;
             try {
                 $maindiv1 = !id || id.trim().length == 0 ? $("div[id^='roadui_window_']", iframesArray[i].document) : $("#" + id, iframesArray[i].document);
             } catch (e) {
             }
-           
+
             if ($maindiv1 != null && $maindiv1.size() > 0) {
                 for (var j = 0; j < $maindiv1.size(); j++) {
                     try {
@@ -321,7 +290,10 @@
                             ifrm.src = "";
                             if (fromInstance) {
                                 //fromInstance参数表示是否通过实例关闭，窗口右上角的X按钮(解决IE下通过X按钮关闭后再次打开提示没有权限错误)
-                                ifrm.document.write('');
+                                try {
+                                    ifrm.document.write('');
+                                } catch (e) { }
+                                
                                 //ifrm.contentWindow.document.clear();
                                 //ifrm.contentWindow.close();
                             }
@@ -354,71 +326,26 @@
     };
     var iframesArray = [];
     this.getOpenerElement = function (id) {
-        if (top.roadflowCurrentWindow) {
-            var $o = $("#" + id, top.roadflowCurrentWindow.document);
-            if ($o.size() > 0) {
-                return $o;
-            }
-            else {
-                iframesArray = [];
-                addIframe(top.roadflowCurrentWindow.document);
-                for (var i = 0; i < iframesArray.length; i++) {
-                    var doc = null;
-                    try {
-                        doc = iframesArray[i].contentWindow.document;
-                    }
-                    catch (e) {
-                        doc = iframesArray[i].document;
-                    }
-                    if (doc) {
-                        var obj = doc.getElementById(id);
-                        if (obj) {
-                            iframesArray = [];
-                            return $(obj);
-                        }
-                    }
-                }
-            }
-        }
+
         iframesArray = [];
-        var openerid = RoadUI.Core.queryString("openerid") || "";
-        if (openerid && openerid.length > 0) {
-            openerid += "_iframe";
-        }
-        var ele = $();
-        var iframes = $(top.document).find("iframe");
-        if (openerid && openerid.length > 0) {
-            for (var i = iframes.size() - 1; i >= 0; i--) {
-                if (openerid && openerid.length > 0 && openerid == iframes.eq(i).attr("id")) {
-                    var obj = iframes.eq(i).get(0).contentWindow.document.getElementById(id);
-                    if (obj) {
-                        return $(obj);
-                    }
+        addIframe(parent.document);
+        for (var i = 0; i < iframesArray.length; i++) {
+            var doc = null;
+            try {
+                doc = iframesArray[i].contentWindow.document;
+            }
+            catch (e) {
+                doc = iframesArray[i].document;
+            }
+            if (doc) {
+                var obj = doc.getElementById(id);
+                if (obj) {
+                    iframesArray = [];
+                    return $(obj);
                 }
             }
         }
-        if (ele.size() == 0) {
-            iframesArray.push(top);
-            addIframe(top.document);
-            for (var i = 0; i < iframesArray.length; i++) {
-                var doc = null;
-                try {
-                    doc = iframesArray[i].contentWindow.document;
-                }
-                catch (e) {
-                    doc = iframesArray[i].document;
-                }
-                if (doc) {
-                    var obj = doc.getElementById(id);
-                    if (obj) {
-                        iframesArray = [];
-                        return $(obj);
-                    }
-                }
-            }
-        }
-        return ele;
-    };
+};
 
     var addIframe = function (doc) {
         var iframes = $(doc).find("iframe");

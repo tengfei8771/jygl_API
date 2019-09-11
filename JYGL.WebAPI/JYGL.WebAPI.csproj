@@ -132,6 +132,17 @@
     <None Include="Areas\RoadFlowCore\Views\FormDesigner\List.cshtml" />
     <None Include="Areas\RoadFlowCore\Views\FormDesigner\ListDelete.cshtml" />
     <None Include="Areas\RoadFlowCore\Views\FormDesigner\Tree.cshtml" />
+    <None Include="Areas\RoadFlowCore\Views\Organize\Body.cshtml" />
+    <None Include="Areas\RoadFlowCore\Views\Organize\Empty.cshtml" />
+    <None Include="Areas\RoadFlowCore\Views\Organize\Index.cshtml" />
+    <None Include="Areas\RoadFlowCore\Views\Organize\SetMenu.cshtml" />
+    <None Include="Areas\RoadFlowCore\Views\Organize\ShowUserMenu.cshtml" />
+    <None Include="Areas\RoadFlowCore\Views\Organize\Sort.cshtml" />
+    <None Include="Areas\RoadFlowCore\Views\Organize\Tree.cshtml" />
+    <None Include="Areas\RoadFlowCore\Views\Organize\Users.cshtml" />
+    <None Include="Areas\RoadFlowCore\Views\Organize\UserSort.cshtml" />
+    <None Include="Areas\RoadFlowCore\Views\Organize\WorkGroup.cshtml" />
+    <None Include="Areas\RoadFlowCore\Views\Organize\WorkGroupSort.cshtml" />
     <None Include="wwwroot\RoadFlowResources\images\login\login2.psd" />
     <None Include="wwwroot\RoadFlowResources\scripts\bigcolorpicker\js\jquery.bigcolorpicker.js" />
     <None Include="wwwroot\RoadFlowResources\scripts\bigcolorpicker\js\syntaxHighlighter\shAutoloader.js" />

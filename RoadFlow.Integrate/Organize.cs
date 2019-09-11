@@ -8,6 +8,7 @@ namespace RoadFlow.Integrate
 {
     public class Organize
     {
+        #region 得到系统所有用户
         /// <summary>
         /// 得到系统所有用户
         /// </summary>
@@ -45,6 +46,8 @@ namespace RoadFlow.Integrate
             }
             return userList;
         }
+        #endregion
+        #region 得到系统所有组织架构
         /// <summary>
         /// 得到系统所有组织架构
         /// </summary>
@@ -65,7 +68,7 @@ namespace RoadFlow.Integrate
                 {
                     Model.Organize objOrg = new Model.Organize();
                     objOrg.Id = new Guid(dr["ORG_ID"].ToString());
-                    objOrg.ParentId = new Guid(dr["ORG_ID_UPPER"].ToString());
+                    objOrg.ParentId = (dr["ORG_ID_UPPER"]==null|| dr["ORG_ID_UPPER"].ToString().Length==0) ? new Guid(): new Guid(dr["ORG_ID_UPPER"].ToString());
                     objOrg.Name = dr["ORG_NAME"].ToString();
                     objOrg.Type = 1;
                     objOrg.Note = dr["REMARK"].ToString();
@@ -76,9 +79,12 @@ namespace RoadFlow.Integrate
             }
             catch
             {
+              
             }
             return orgList;
         }
+        #endregion
+        #region 得到所有组织架构与人员关系
         /// <summary>
         /// 得到所有组织架构与人员关系
         /// </summary>
@@ -111,6 +117,8 @@ namespace RoadFlow.Integrate
             }
             return orgUserList;
         }
+        #endregion
+        #region 得到所有工作组/角色组
         /// <summary>
         /// 得到所有工作组/角色组
         /// </summary>
@@ -145,10 +153,11 @@ namespace RoadFlow.Integrate
                 }
                 return orgWorkGroupList;
             }
-            catch
+            catch(Exception ex)
             {
             }
             return orgWorkGroupList;
         }
+        #endregion
     }
 }
