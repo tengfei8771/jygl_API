@@ -1,7 +1,7 @@
 {
   "DataType": "MYSQL",
-  "MYSQL": "server=114.115.142.34;user id=root;pwd=123456;database=jygl;SslMode = none;Charset=utf8",
-  "SQLSERVER": "server=weiapp.pw;user id=sa;pwd=Lhsm7800525;database=jygl",
+  "MYSQL1": "server=114.115.142.34;user id=root;pwd=123456;database=jygl;SslMode = none;Charset=utf8",
+  "SQLSERVER": "server=weiapp.pw;user id=sa;pwd=Lhsm7800525;database=uidp",
   "ORACLE": "server=localhost;user id=root;pwd=root;database=uidp;SslMode = none;Charset=utf8",
-  "MYSQL1": "server=114.115.142.34;user id=root;pwd=123456;database=jygl;SslMode = none;Charset=utf8"
+  "MYSQL": "server=localhost;user id=root;pwd=root;database=jygl;SslMode = none;Charset=utf8"
 }

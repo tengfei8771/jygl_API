@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -10,16 +10,16 @@
 
   <ItemGroup>
     <Reference Include="RoadFlow.Cache">
-      <HintPath>..\..\..\roadflow\RoadFlow.Mvc\bin\Debug\netcoreapp2.1\RoadFlow.Cache.dll</HintPath>
+      <HintPath>..\JYGL.WebAPI\bin\Debug\netcoreapp2.1\RoadFlow.Cache.dll</HintPath>
     </Reference>
     <Reference Include="RoadFlow.Data">
-      <HintPath>..\..\..\roadflow\RoadFlow.Mvc\bin\Debug\netcoreapp2.1\RoadFlow.Data.dll</HintPath>
+      <HintPath>..\JYGL.WebAPI\bin\Debug\netcoreapp2.1\RoadFlow.Data.dll</HintPath>
     </Reference>
     <Reference Include="RoadFlow.Model">
-      <HintPath>..\..\..\roadflow\RoadFlow.Mvc\bin\Debug\netcoreapp2.1\RoadFlow.Model.dll</HintPath>
+      <HintPath>..\JYGL.WebAPI\bin\Debug\netcoreapp2.1\RoadFlow.Model.dll</HintPath>
     </Reference>
     <Reference Include="RoadFlow.Utility">
-      <HintPath>..\..\..\roadflow\RoadFlow.Mvc\bin\Debug\netcoreapp2.1\RoadFlow.Utility.dll</HintPath>
+      <HintPath>..\JYGL.WebAPI\bin\Debug\netcoreapp2.1\RoadFlow.Utility.dll</HintPath>
     </Reference>
   </ItemGroup>
 

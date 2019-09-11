@@ -11,13 +11,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\CangChu\**" />
+    <Content Remove="Controllers\CangChu\**" />
+    <EmbeddedResource Remove="Controllers\CangChu\**" />
+    <None Remove="Controllers\CangChu\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Filters\AuthFilterAttribute.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Areas\RoadFlowCore\Data\" />
     <Folder Include="Areas\RoadFlowCore\Models\" />
-    <Folder Include="Controllers\CangChu\" />
     <Folder Include="UploadFiles\img\" />
     <Folder Include="UploadFiles\notice\" />
   </ItemGroup>
@@ -902,22 +908,22 @@
       <HintPath>bin\Debug\netcoreapp2.1\RoadFlow.Business.dll</HintPath>
     </Reference>
     <Reference Include="RoadFlow.Cache">
-      <HintPath>..\..\..\roadflow\RoadFlow.Mvc\bin\Debug\netcoreapp2.1\RoadFlow.Cache.dll</HintPath>
+      <HintPath>bin\Debug\netcoreapp2.1\RoadFlow.Cache.dll</HintPath>
     </Reference>
     <Reference Include="RoadFlow.Data">
-      <HintPath>..\..\..\roadflow\RoadFlow.Mvc\bin\Debug\netcoreapp2.1\RoadFlow.Data.dll</HintPath>
+      <HintPath>bin\Debug\netcoreapp2.1\RoadFlow.Data.dll</HintPath>
     </Reference>
     <Reference Include="RoadFlow.Mapper">
       <HintPath>bin\Debug\netcoreapp2.1\RoadFlow.Mapper.dll</HintPath>
     </Reference>
     <Reference Include="RoadFlow.Model">
-      <HintPath>..\..\..\roadflow\RoadFlow.Mvc\bin\Debug\netcoreapp2.1\RoadFlow.Model.dll</HintPath>
+      <HintPath>bin\Debug\netcoreapp2.1\RoadFlow.Model.dll</HintPath>
     </Reference>
     <Reference Include="RoadFlow.Pinyin">
       <HintPath>bin\Debug\netcoreapp2.1\RoadFlow.Pinyin.dll</HintPath>
     </Reference>
     <Reference Include="RoadFlow.Utility">
-      <HintPath>..\..\..\roadflow\RoadFlow.Mvc\bin\Debug\netcoreapp2.1\RoadFlow.Utility.dll</HintPath>
+      <HintPath>bin\Debug\netcoreapp2.1\RoadFlow.Utility.dll</HintPath>
     </Reference>
   </ItemGroup>
 
