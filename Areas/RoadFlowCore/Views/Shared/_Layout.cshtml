@@ -1,0 +1,51 @@
+﻿@{ 
+    string theme = Tools.GetCurrentTheme();
+    string version = Config.SystemVersion;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>@ViewData["Title"]</title>
+    <link href="~/RoadFlowResources/themes/@theme/style/style.css?version=@version" id="style_style" rel="stylesheet" type="text/css" media="screen" />
+    <link href="~/RoadFlowResources/themes/@theme/style/ui.css?version=@version" id="style_ui" rel="stylesheet" type="text/css" media="screen" />
+    <link href="~/RoadFlowResources/themes/common.css?version=@version" rel="stylesheet" type="text/css" media="screen" />
+    <link href="~/RoadFlowResources/themes/@theme/jqgrid/ui.jqgrid.css?version=@version" rel="stylesheet" />
+    <link href="~/RoadFlowResources/themes/@theme/jqgrid/jquery-ui.css?version=@version" id="grid_ui" rel="stylesheet" />
+    <link href="~/RoadFlowResources/scripts/font-awesome-4.7.0/css/font-awesome.min.css" id="style_fontawesome" rel="stylesheet" media="screen" />
+    <link href="~/RoadFlowResources/scripts/select2/select2.css?version=@version" rel="stylesheet" />
+    <script type="text/javascript" src="~/RoadFlowResources/scripts/jquery-1.12.4.min.js"></script>
+    <script type="text/javascript" src="~/RoadFlowResources/scripts/jquery.cookie.js"></script>
+    <script type="text/javascript" src="~/RoadFlowResources/scripts/json.js"></script>
+    <script type="text/javascript" src="~/RoadFlowResources/scripts/roadui/roadui.core.js?version=@version"></script>
+    <script type="text/javascript" src="~/RoadFlowResources/scripts/roadui/roadui.button.js?version=@version"></script>
+    <script type="text/javascript" src="~/RoadFlowResources/scripts/roadui/roadui.calendar.js?version=@version"></script>
+    <script type="text/javascript" src="~/RoadFlowResources/scripts/roadui/roadui.file.js?version=@version"></script>
+    <script type="text/javascript" src="~/RoadFlowResources/scripts/roadui/roadui.member.js?version=@version"></script>
+    <script type="text/javascript" src="~/RoadFlowResources/scripts/roadui/roadui.dict.js?version=@version"></script>
+    <script type="text/javascript" src="~/RoadFlowResources/scripts/roadui/roadui.menu.js?version=@version"></script>
+    <script type="text/javascript" src="~/RoadFlowResources/scripts/roadui/roadui.select.js?version=@version"></script>
+    <script type="text/javascript" src="~/RoadFlowResources/scripts/roadui/roadui.tab.js?version=@version"></script>
+    <script type="text/javascript" src="~/RoadFlowResources/scripts/roadui/roadui.text.js?version=@version"></script>
+    <script type="text/javascript" src="~/RoadFlowResources/scripts/roadui/roadui.textarea.js?version=@version"></script>
+    <script type="text/javascript" src="~/RoadFlowResources/scripts/roadui/roadui.tree.js?version=@version"></script>
+    <script type="text/javascript" src="~/RoadFlowResources/scripts/roadui/roadui.validate.js?version=@version"></script>
+    <script type="text/javascript" src="~/RoadFlowResources/scripts/roadui/roadui.window.js?version=@version"></script>
+    <script type="text/javascript" src="~/RoadFlowResources/scripts/roadui/roadui.dragsort.js?version=@version"></script>
+    <script type="text/javascript" src="~/RoadFlowResources/scripts/roadui/roadui.selectico.js?version=@version"></script>
+    <script type="text/javascript" src="~/RoadFlowResources/scripts/roadui/roadui.selectdiv.js?version=@version"></script>
+    <script type="text/javascript" src="~/RoadFlowResources/scripts/roadui/roadui.accordion.js?version=@version"></script>
+    <script type="text/javascript" src="~/RoadFlowResources/scripts/roadui/roadui.treetable.js?version=@version"></script>
+    <script type="text/javascript" src="~/RoadFlowResources/scripts/select2/select2.full.js?version=@version"></script>
+    <script type="text/javascript" src="~/RoadFlowResources/scripts/jqgrid/js/i18n/grid.locale-cn.js"></script>
+    <script type="text/javascript" src="~/RoadFlowResources/scripts/jqgrid/js/jquery.jqGrid.js"></script>
+    <script type="text/javascript" src="~/RoadFlowResources/scripts/My97DatePicker/WdatePicker.js"></script>
+    <script type="text/javascript" src="~/RoadFlowResources/scripts/jquery.nicescroll.min.js"></script>
+    <script type="text/javascript" src="~/RoadFlowResources/scripts/roadui/roadui.init.js?version=@version"></script>
+</head>
+    <body>
+        @RenderBody()
+    </body>
+</html>

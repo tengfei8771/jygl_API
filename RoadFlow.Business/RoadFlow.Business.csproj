@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.0.3" />
+    <PackageReference Include="System.Drawing.Common" Version="4.5.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RoadFlow.Cache\RoadFlow.Cache.csproj" />
+    <ProjectReference Include="..\RoadFlow.Data\RoadFlow.Data.csproj" />
+    <ProjectReference Include="..\RoadFlow.Integrate\RoadFlow.Integrate.csproj" />
+    <ProjectReference Include="..\RoadFlow.Model\RoadFlow.Model.csproj" />
+    <ProjectReference Include="..\RoadFlow.Utility\RoadFlow.Utility.csproj" />
+  </ItemGroup>
+
+</Project>

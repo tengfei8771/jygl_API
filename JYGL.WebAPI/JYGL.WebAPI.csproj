@@ -11,26 +11,19 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Controllers\CangChu\**" />
-    <Content Remove="Controllers\CangChu\**" />
-    <EmbeddedResource Remove="Controllers\CangChu\**" />
-    <None Remove="Controllers\CangChu\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Remove="Filters\AuthFilterAttribute.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Areas\RoadFlowCore\Data\" />
     <Folder Include="Areas\RoadFlowCore\Models\" />
+    <Folder Include="Controllers\CangChu\" />
     <Folder Include="UploadFiles\img\" />
     <Folder Include="UploadFiles\notice\" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.1.12" />
-    <PackageReference Include="Microsoft.AspNetCore.Cors" Version="2.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.1.13" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.9" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
     <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="2.19.31" />
@@ -898,33 +891,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\RoadFlow.Business\RoadFlow.Business.csproj" />
+    <ProjectReference Include="..\RoadFlow.Cache\RoadFlow.Cache.csproj" />
+    <ProjectReference Include="..\RoadFlow.Data\RoadFlow.Data.csproj" />
     <ProjectReference Include="..\RoadFlow.Integrate\RoadFlow.Integrate.csproj" />
+    <ProjectReference Include="..\RoadFlow.Mapper\RoadFlow.Mapper.csproj" />
+    <ProjectReference Include="..\RoadFlow.Model\RoadFlow.Model.csproj" />
+    <ProjectReference Include="..\RoadFlow.Pinyin\RoadFlow.Pinyin.csproj" />
+    <ProjectReference Include="..\RoadFlow.Utility\RoadFlow.Utility.csproj" />
     <ProjectReference Include="..\UIDP.BIZModule\UIDP.BIZModule.csproj" />
     <ProjectReference Include="..\UIDP.LOG\UIDP.LOG\UIDP.LOG.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="RoadFlow.Business">
-      <HintPath>bin\Debug\netcoreapp2.1\RoadFlow.Business.dll</HintPath>
-    </Reference>
-    <Reference Include="RoadFlow.Cache">
-      <HintPath>bin\Debug\netcoreapp2.1\RoadFlow.Cache.dll</HintPath>
-    </Reference>
-    <Reference Include="RoadFlow.Data">
-      <HintPath>bin\Debug\netcoreapp2.1\RoadFlow.Data.dll</HintPath>
-    </Reference>
-    <Reference Include="RoadFlow.Mapper">
-      <HintPath>bin\Debug\netcoreapp2.1\RoadFlow.Mapper.dll</HintPath>
-    </Reference>
-    <Reference Include="RoadFlow.Model">
-      <HintPath>bin\Debug\netcoreapp2.1\RoadFlow.Model.dll</HintPath>
-    </Reference>
-    <Reference Include="RoadFlow.Pinyin">
-      <HintPath>bin\Debug\netcoreapp2.1\RoadFlow.Pinyin.dll</HintPath>
-    </Reference>
-    <Reference Include="RoadFlow.Utility">
-      <HintPath>bin\Debug\netcoreapp2.1\RoadFlow.Utility.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>

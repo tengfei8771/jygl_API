@@ -5,13 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="CangChu\**" />
-    <EmbeddedResource Remove="CangChu\**" />
-    <None Remove="CangChu\**" />
+    <ProjectReference Include="..\UIDP.UTILITY\UIDP.UTILITY.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\UIDP.UTILITY\UIDP.UTILITY.csproj" />
+    <Folder Include="CangChu\" />
   </ItemGroup>
 
 </Project>

@@ -1,0 +1,60 @@
+﻿
+@{
+    ViewData["Title"] = "FormEditSave";
+}
+
+<script type="text/javascript">
+    var issuccess = "1" == "@ViewData["issuccess"]";
+    var msg = "@Html.Raw(ViewData["msg"])";
+    var url = '@Html.Raw(ViewData["url"])';
+    var isrefresparent = "1" == "@ViewData["isrefresparent"]";
+    var openmodel = "@ViewData["rf_appopenmodel"]";
+    var isrefreshflow = "1" == "@ViewData["isrefreshflow"]";//是否刷新流程主表单
+    var win = new RoadUI.Window();
+    alert(msg);
+    if (issuccess) {
+        if (isrefreshflow) {
+            if ("1" == openmodel || "2" == openmodel) {//弹出层刷新
+                try {
+                    win.reloadOpener();
+                    win.close();
+                } catch (e) {
+
+                }
+            } else if ("3" == openmodel || "4" == openmodel || "5" == openmodel) { //弹出窗口刷新
+                if (parent.opener) {
+                    try {
+                        parent.opener.location = parent.opener.location;
+                        window.close();
+                    } catch (e) {
+
+                    }
+                }
+            }
+        }
+        else {
+            parent.location = url;
+            if (isrefresparent) {
+                if ("1" == openmodel || "2" == openmodel) {//弹出层刷新
+                    try {
+                        win.reloadOpener(null, null, "query()");
+                        win.close();
+                    } catch (e) {
+                        win.reloadOpener();
+                        win.close();
+                    }
+                } else if ("3" == openmodel || "4" == openmodel || "5" == openmodel) { //弹出窗口刷新
+                    if (parent.opener) {
+                        try {
+                            parent.opener.query();
+                            window.close();
+                        } catch (e) {
+                            parent.opener.location = parent.opener.location;
+                            window.close();
+                        }
+                    }
+                }
+            }
+        }
+    }
+</script>

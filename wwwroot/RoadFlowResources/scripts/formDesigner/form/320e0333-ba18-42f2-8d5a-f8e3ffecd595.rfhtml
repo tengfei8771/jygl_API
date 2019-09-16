@@ -1,0 +1,57 @@
+﻿@using RoadFlow.Utility;
+@using RoadFlow.Business;
+@using Microsoft.AspNetCore.Http;
+@{
+	var Request = (HttpRequest)ViewData["request"];
+	string instanceId = Request.Querys("instanceid");
+	string taskId = Request.Querys("taskid");
+	string stepId = Request.Querys("stepid");
+	string flowId = Request.Querys("flowid");
+	string display = Request.Querys("display");
+	bool showArchive = "1".Equals(Request.Querys("showarchive"));
+	string fieldStatusJSON = string.Empty;
+	string formData = showArchive ? new FlowArchive().GetArchiveData(Request.Querys("archiveid").ToGuid()) : new Form().GetFormData("8dfbaef1-86e8-4fc4-8a04-efb300b26623", "jy_fybx", "S_ID", instanceId, stepId, flowId, "[]", out fieldStatusJSON);
+}
+<script type="text/javascript" src="~/RoadFlowResources/scripts/flowRun/form.js"></script>
+<script type="text/javascript">
+	var formDataJSON = @Html.Raw(formData.IsNullOrWhiteSpace() ? "[]" : formData);
+	var fieldStatusJSON = @Html.Raw(fieldStatusJSON.IsNullOrWhiteSpace() ? "[]" : fieldStatusJSON);
+	var defaultValuesJSON = @Html.Raw(new Form().GetDefaultValuesJSON("[{'id':'JY_FYBX-DWBM','value':'{<UserDeptId>}'}]", fieldStatusJSON));
+	$(window).load(function () {
+		formLoad.load(formDataJSON, fieldStatusJSON, "jy_fybx", "@(display.IsNullOrWhiteSpace() ? ViewData["display"].ToString() : display)", defaultValuesJSON);
+	});
+</script>
+<link href="~/RoadFlowResources/scripts/flowRun/common.css" rel="stylesheet" />
+<input type="hidden" name="form_dbconnid" id="form_dbconnid" value="8dfbaef1-86e8-4fc4-8a04-efb300b26623"/>
+<input type="hidden" name="form_dbtable" id="form_dbtable" value="jy_fybx"/>
+<input type="hidden" name="form_dbtableprimarykey" id="form_dbtableprimarykey" value="S_ID"/>
+<input type="hidden" name="form_dbtabletitle" id="form_dbtabletitle" value="BXDH"/>
+<input type="hidden" name="form_instanceid" id="form_instanceid" value="@instanceId"/>
+<textarea style="display:none;" name="form_fieldstatus" id="form_fieldstatus">@Html.Raw(fieldStatusJSON.IsNullOrWhiteSpace() ? "[]" : fieldStatusJSON)</textarea>
+<textarea style="display:none;" name="form_dataformatjson" id="form_dataformatjson">[]</textarea>
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<table align="center" border="1" cellpadding="1" cellspacing="1" style="width:500px;">
+	<tbody>
+		<tr>
+			<td>部门</td>
+			<td><input data-isflow="1" data-type="organize" id="JY_FYBX-DWBM" type="text" value="" class="mymember" name="JY_FYBX-DWBM" unit="0" dept="0" station="0" group="0" user="0" more="0"></td>
+		</tr>
+		<tr>
+			<td>单号</td>
+			<td><input data-isflow="1" data-type="text" id="JY_FYBX-BXDH" style="" type="text" value="" class="mytext" name="JY_FYBX-BXDH"></td>
+		</tr>
+		<tr>
+			<td>金额</td>
+			<td><input data-isflow="1" data-type="text" id="JY_FYBX-BXJE" style="" type="text" value="" class="mytext" validate="decimal" name="JY_FYBX-BXJE"></td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+		</tr>
+	</tbody>
+</table>
+
+<p>&nbsp;</p>

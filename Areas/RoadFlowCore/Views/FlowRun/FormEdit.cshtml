@@ -1,0 +1,114 @@
+﻿@using RoadFlow.Utility
+<script>
+    RoadUI.Core.showWait();
+</script>
+<style type="text/css">
+    body { overflow: hidden; margin: 0; padding: 0; }
+</style>
+<div>
+    <form id="mainform" name="mainform" action="FormEditSave?@Html.Raw(ViewData["query"])" method="post" target="submiter">
+        @Html.AntiForgeryToken()
+        @if (!string.IsNullOrEmpty(ViewData["secondtablerelationfield"].ToString()) && !string.IsNullOrEmpty(ViewData["secondtable"].ToString()))
+        {
+           <input type="hidden" id="@((ViewData["secondtable"].ToString() + "-" + ViewData["secondtablerelationfield"].ToString()).ToUpper())" name="@((ViewData["secondtable"].ToString() + "-" + ViewData["secondtablerelationfield"].ToString()).ToUpper())" value="@ViewData["primarytableid"]" />
+        }
+        <!--签批按钮-->
+        @{
+            var stepButtons = (List<RoadFlow.Model.FlowButton>)ViewData["flowButtons"];
+        }
+        @if (stepButtons.Count > 0)
+        {
+            <div class="toolbar" style="margin:0 auto; border-top:none 0; position:fixed; top:0; left:0; right:0; z-index:999; width:100%;">
+                <div>
+                    @foreach (var button in stepButtons)
+                    {
+                        @if (!button.Id.IsEmptyGuid())
+                        {
+                            <a href="javascript:void(0);" onclick="fun_@(button.Id.ToString("N"))(this);" title="@button.Note">
+                                @if (button.Ico.IsFontIco())
+                                {
+                                    <i class='fa @button.Ico' style='font-size:14px;margin-right:3px;'></i><label>@button.Title</label>
+                                }
+                                else
+                                {
+                                    <span style='@(!button.Ico.IsNullOrWhiteSpace() ? "background:url(" + Url.Content("~" + button.Ico) + ") no-repeat left center;" : "")'>@button.Title</span>
+                                }
+                            </a>
+                            <script type="text/javascript">
+                                function fun_@(button.Id.ToString("N"))(a) { @Html.Raw(button.Script) }
+                            </script>
+                        }
+                        else
+                        {
+                            <span class="toolbarsplit">&nbsp;</span>
+                        }
+                    }
+                </div>
+            </div>
+            <div style="height: 40px;"></div>
+        }
+        <!--签批按钮-->
+
+        <!--表单主体-->
+            <div style="overflow:auto;" id="form_body_div">
+                <iframe name="submiter" style="height:100px; display:none;"></iframe>
+                <!--表单-->
+                @if (!string.IsNullOrWhiteSpace(ViewData["formUrl"].ToString()))
+                {
+                    if ("1".Equals(ViewData["isCustomeForm"].ToString()))
+                    {
+                        <input type="hidden" id="form_iscustomeform" name="form_iscustomeform" value="1" />
+                        <input type="hidden" name="customformtitle" id="customformtitle" value="" />
+                        <iframe src="@Html.Raw(ViewData["formUrl"])" onload="setIframeHeight();" id="customeformiframe" name="customeformiframe" frameborder="0" border="0" style="border:none 0;padding:0;width:100%;margin-top:10px;"></iframe>
+                    }
+                    else
+                    {
+                        <input type="hidden" id="form_iscustomeform" name="form_iscustomeform" value="0" />
+                        await Html.RenderPartialAsync(ViewData["formUrl"].ToString());
+                    }
+                }
+                else //如果表单为空，也要在这里放一个HIDDEN，不然发送去会去保存数据，会报错
+                {
+                    <input type="hidden" id="form_iscustomeform" name="form_iscustomeform" value="1" />
+                }
+                <!--表单-->
+            </div>
+        <!--表单主体-->
+        <br /><br /><br />
+    </form>
+</div>
+<script type="text/javascript">
+    var isDebug = '@ViewData["isDebug"]' === '1';
+    var isSign = '0' !== '@ViewData["signType"]';
+    var signType = '@ViewData["signType"]';
+    var iframeid = '@ViewData["tabId"]';
+    var isShow = "1" === "@ViewData["display"]";//是否是查看模式
+    var appid = '@ViewData["appId"]';
+    var query = '@Html.Raw(ViewData["query"])';
+    var isSystemDetermine = '0' === '@ViewData["flowType"]';//当前步骤的后续流转类型是否是系统判断
+    var instanceid = '@ViewData["instanceId"]';
+    var isCustomeForm = '1' === '@ViewData["isCustomeForm"]';
+    $(window).load(function ()
+    {
+        if (!isCustomeForm) {
+            $("#form_body_div").height($(window).height() - 45);
+        }
+        //关闭弹出的正在加载层
+        RoadUI.Core.closeWait();
+    });
+    function setIframeHeight() {
+        try {
+            var iframe = document.getElementById("customeformiframe");
+            if (iframe.attachEvent) {
+                iframe.height = iframe.contentWindow.document.documentElement.scrollHeight + 2;
+                return;
+            } else {
+                iframe.height = iframe.contentDocument.body.scrollHeight + 2;
+                return;
+            }
+        } catch (e) {
+
+        }
+    }
+</script>
+<script type="text/javascript" src="~/RoadFlowResources/scripts/flowRun/common.js"></script>

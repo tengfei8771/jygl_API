@@ -1,0 +1,43 @@
+﻿@using RoadFlow.Utility
+@{
+    var request = Tools.HttpContext.Request;
+    string flowid = request.Querys("flowid");
+    string groupid = request.Querys("groupid");
+    string stepid = request.Querys("stepid");
+
+    RoadFlow.Business.FlowTask flowTask = new RoadFlow.Business.FlowTask();
+    var groupTasks = flowTask.GetListByGroupId(groupid.ToGuid()).FindAll(p => p.Status == 2 && !p.Comments.IsNullOrWhiteSpace()).OrderBy(p => p.Sort);
+}
+    <style type="text/css">
+        .commenttable { margin: 12px auto 20px auto; width: 100%; background: #ededee; }
+        .commenttable tr th { text-align: left; height: 25px; background: #ffffff; font-weight: normal; }
+        .commenttable tr td { height: 28px; background: #ffffff; }
+    </style>
+@foreach (var task in groupTasks)
+{
+    string signSrc = string.Empty;
+    if (task.IsSign == 1)
+    {
+        signSrc = Url.Content("~" + new RoadFlow.Business.User().GetSignSrc(task.ReceiveId.ToString()));
+    }
+    <table cellpadding="0" cellspacing="1" border="0" class="commenttable">
+        <tr>
+            <th style="width:30%;">&nbsp;步骤：@task.StepName</th>
+            <th style="width:20%;">&nbsp;处理人：@task.ReceiveName</th>
+            <th style="width:25%;">&nbsp;接收时间：@task.ReceiveTime.ToShortDateTimeString()</th>
+            <th style="width:25%;">&nbsp;完成时间：@(task.CompletedTime1.HasValue ? task.CompletedTime1.Value.ToShortDateTimeString() : "")</th>
+        </tr>
+        <tr>
+            <td colspan="5" style="">
+                <div style="float:left; height:26px; padding:9px 0 0 6px; ">
+                    处理意见：@Html.Raw(task.Comments)
+                </div>
+                <div style="float:left; margin:5px 0 0 20px;"><img alt="" src="@signSrc" /></div>
+                @if (!task.Attachment.IsNullOrWhiteSpace())
+                {
+                <div style="float:left;padding:9px 0 0 15px;">附件：@Html.Raw(task.Attachment.ToFilesShowString(false))</div>
+                }
+            </td>
+        </tr>
+    </table>
+}

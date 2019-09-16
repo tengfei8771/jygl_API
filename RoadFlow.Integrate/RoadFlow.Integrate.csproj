@@ -1,26 +1,15 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\RoadFlow.Cache\RoadFlow.Cache.csproj" />
+    <ProjectReference Include="..\RoadFlow.Data\RoadFlow.Data.csproj" />
+    <ProjectReference Include="..\RoadFlow.Model\RoadFlow.Model.csproj" />
+    <ProjectReference Include="..\RoadFlow.Utility\RoadFlow.Utility.csproj" />
     <ProjectReference Include="..\UIDP.ODS\UIDP.ODS.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="RoadFlow.Cache">
-      <HintPath>..\JYGL.WebAPI\bin\Debug\netcoreapp2.1\RoadFlow.Cache.dll</HintPath>
-    </Reference>
-    <Reference Include="RoadFlow.Data">
-      <HintPath>..\JYGL.WebAPI\bin\Debug\netcoreapp2.1\RoadFlow.Data.dll</HintPath>
-    </Reference>
-    <Reference Include="RoadFlow.Model">
-      <HintPath>..\JYGL.WebAPI\bin\Debug\netcoreapp2.1\RoadFlow.Model.dll</HintPath>
-    </Reference>
-    <Reference Include="RoadFlow.Utility">
-      <HintPath>..\JYGL.WebAPI\bin\Debug\netcoreapp2.1\RoadFlow.Utility.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>
