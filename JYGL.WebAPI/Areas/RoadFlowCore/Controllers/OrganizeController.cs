@@ -4,12 +4,24 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using RoadFlow.Utility;
+using Microsoft.AspNetCore.Http;
 
 namespace RoadFlow.Mvc.Areas.RoadFlowCore.Controllers
 {
     [Area("RoadFlowCore")]
     public class OrganizeController : Controller
     {
+        public string SetSession()
+        {
+            string userId = Request.Querys("userid");
+            if (!userId.IsGuid())
+            {
+                return "0";
+            }
+            HttpContext.Session.SetString(Config.UserIdSessionKey, userId);
+            return "1";
+        }
+
         #region 组织架构相关操作
         [Validate]
         public IActionResult Index()

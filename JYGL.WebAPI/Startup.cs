@@ -81,7 +81,7 @@ namespace UIDP.WebAPI
                     .AllowCredentials();//指定处理cookie
                 });
             });
-            services.AddMvc().AddJsonOptions(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver()); 
+           
             services.Configure<Microsoft.AspNetCore.Http.Features.FormOptions>(x =>
             {
 
@@ -93,12 +93,7 @@ namespace UIDP.WebAPI
 
 
             });
-            services.Configure<CookiePolicyOptions>(options =>
-            {
-                //This lambda determines whether user consent for non - essential cookies is needed for a given request.
-                //options.CheckConsentNeeded = context => true;
-                //options.MinimumSameSitePolicy = SameSiteMode.None;
-            });
+          
             //设置表单可提交内容长度
             services.Configure<FormOptions>(options =>
             {
@@ -109,60 +104,67 @@ namespace UIDP.WebAPI
                 options.MultipartBoundaryLengthLimit = int.MaxValue;
                 options.MultipartHeadersLengthLimit = int.MaxValue;
             });
-            services.AddSession(options =>
+            services.Configure<CookiePolicyOptions>(options =>
             {
-                options.Cookie.Name = RoadFlow.Utility.Config.CookieName;
-                options.IdleTimeout = TimeSpan.FromMinutes(RoadFlow.Utility.Config.SessionTimeout);//设置session的过期时间
+                //This lambda determines whether user consent for non - essential cookies is needed for a given request.
+                options.CheckConsentNeeded = context => true;
+                options.MinimumSameSitePolicy = SameSiteMode.None;
             });
             services.AddDistributedMemoryCache();
             services.AddHttpContextAccessor();
             services.AddTimedJob();
             services.AddMemoryCache();
+            services.AddSession(options =>
+            {
+                options.Cookie.Name = RoadFlow.Utility.Config.CookieName;
+                options.IdleTimeout = TimeSpan.FromMinutes(RoadFlow.Utility.Config.SessionTimeout);//设置session的过期时间
+            });
             services.AddUEditorService("ueditor.json", true);
             services.AddMvc();
+            services.AddMvc().AddJsonOptions(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            app.UseStaticFiles(new StaticFileOptions
-            {
-                FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(
-        System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), "ExcelModel")),
-                RequestPath = "/ExcelModel"
-            });
-            app.UseStaticFiles(new StaticFileOptions
-            {
-                FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(
-       System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), "ExcelModel/Templates")),
-                RequestPath = "/ExcelModel/Templates"
-            });
-            app.UseStaticFiles(new StaticFileOptions
-            {
-                FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(
-System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), "Files/export")),
-                RequestPath = "/Files/export"
-            });
-            app.UseStaticFiles(new StaticFileOptions
-            {
-                FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(
-               System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), "UploadFiles/img")),
-                RequestPath = "/UploadFiles/img",
-                OnPrepareResponse = ctx =>
-                {
-                    ctx.Context.Response.Headers.Append("Cache-Control", "public,max-age=36000");
-                }
-            });
-            app.UseStaticFiles(new StaticFileOptions
-            {
-                FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(
-                System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), "UploadFiles/notice")),
-                RequestPath = "/UploadFiles/notice",
-                OnPrepareResponse = ctx =>
-                {
-                    ctx.Context.Response.Headers.Append("Cache-Control", "public,max-age=36000");
-                }
-            });
+//            app.UseStaticFiles(new StaticFileOptions
+//            {
+//                FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(
+//        System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), "ExcelModel")),
+//                RequestPath = "/ExcelModel"
+//            });
+//            app.UseStaticFiles(new StaticFileOptions
+//            {
+//                FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(
+//       System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), "ExcelModel/Templates")),
+//                RequestPath = "/ExcelModel/Templates"
+//            });
+//            app.UseStaticFiles(new StaticFileOptions
+//            {
+//                FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(
+//System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), "Files/export")),
+//                RequestPath = "/Files/export"
+//            });
+//            app.UseStaticFiles(new StaticFileOptions
+//            {
+//                FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(
+//               System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), "UploadFiles/img")),
+//                RequestPath = "/UploadFiles/img",
+//                OnPrepareResponse = ctx =>
+//                {
+//                    ctx.Context.Response.Headers.Append("Cache-Control", "public,max-age=36000");
+//                }
+//            });
+//            app.UseStaticFiles(new StaticFileOptions
+//            {
+//                FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(
+//                System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), "UploadFiles/notice")),
+//                RequestPath = "/UploadFiles/notice",
+//                OnPrepareResponse = ctx =>
+//                {
+//                    ctx.Context.Response.Headers.Append("Cache-Control", "public,max-age=36000");
+//                }
+//            });
             #region 解决Ubuntu Nginx 代理不能获取IP问题
             app.UseForwardedHeaders(new ForwardedHeadersOptions
             {
@@ -179,7 +181,6 @@ System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), "Files/export"
                 builder.AllowAnyMethod();
                 builder.AllowAnyOrigin();
             });
-            app.UseCors("all");
             app.UseTimedJob();
             app.UseStaticFiles();
             app.UseStaticHttpContext();
