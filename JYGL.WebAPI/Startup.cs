@@ -107,7 +107,7 @@ namespace UIDP.WebAPI
             services.Configure<CookiePolicyOptions>(options =>
             {
                 //This lambda determines whether user consent for non - essential cookies is needed for a given request.
-                options.CheckConsentNeeded = context => true;
+               // options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
             services.AddDistributedMemoryCache();
@@ -116,11 +116,11 @@ namespace UIDP.WebAPI
             services.AddMemoryCache();
             services.AddSession(options =>
             {
-                options.Cookie.Name = RoadFlow.Utility.Config.CookieName;
+                options.Cookie.HttpOnly = true;
                 options.IdleTimeout = TimeSpan.FromMinutes(RoadFlow.Utility.Config.SessionTimeout);//设置session的过期时间
             });
             services.AddUEditorService("ueditor.json", true);
-            services.AddMvc();
+            //services.AddMvc();
             services.AddMvc().AddJsonOptions(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
         }
 

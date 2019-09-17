@@ -118,9 +118,6 @@ namespace WZGX.WebAPI.Controllers
                     {
                         level = 2;
                     }
-                    //HttpContext.Session.SetString("UserId", userId);
-                    HttpContext.Session.SetString(RoadFlow.Utility.Config.UserIdSessionKey.ToString(), userId.ToString());
-                   //var temp= HttpContext.Session.GetString(RoadFlow.Utility.Config.UserIdSessionKey.ToString());
                     log.Info(DateTime.Now, userId, userName, Extension.GetClientUserIp(Request.HttpContext), 2, "LogIn", "", level);
                     return Json(new
                     {

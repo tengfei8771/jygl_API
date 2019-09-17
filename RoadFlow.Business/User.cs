@@ -41,6 +41,12 @@ namespace RoadFlow.Business
                 {
                     return uid;
                 }
+                string AccessToken = context.Request.Cookies["Admin-Token"];
+                string userId = UIDP.UTILITY.AccessTokenTool.GetUserId(AccessToken);
+                if (userId.IsGuid(out Guid uid1))
+                {
+                    return uid1;
+                }
                 if (Config.IsDebug && Config.DebugUserId.IsGuid(out Guid debugUserId))
                 {
                     return debugUserId;

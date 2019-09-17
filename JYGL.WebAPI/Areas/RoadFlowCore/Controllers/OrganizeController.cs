@@ -18,7 +18,8 @@ namespace RoadFlow.Mvc.Areas.RoadFlowCore.Controllers
             {
                 return "0";
             }
-            HttpContext.Session.SetString(Config.UserIdSessionKey, userId);
+           // HttpContext.Session.SetString(Config.UserIdSessionKey, userId);
+            //HttpContext.Response.Cookies.Append(Config.UserIdSessionKey, userId);
             return "1";
         }
 
