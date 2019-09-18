@@ -172,6 +172,31 @@ where a.ISDELETE='1' order by ORG_CODE";
         public DataTable syncOrgList()
         {
             string sql = "select * FROM ts_uidp_org";
+            if (GetDBType() == "MYSQL")
+            {
+                sql = @"select a.*,(	select GROUP_CONCAT('''u_',USER_ID,'''') list from(
+	select a.USER_ID,a.ORG_ID,b.LEADER_TYPE from ts_uidp_org_user a inner join  ts_uidp_userinfo b on a.USER_ID=b.USER_ID
+	) tbl where LEADER_TYPE=1 and ORG_ID=a.ORG_ID) Leader,(	select GROUP_CONCAT(
+		'''u_',
+		USER_ID,
+		''''
+	) list from(
+	select a.USER_ID,a.ORG_ID,b.LEADER_TYPE from ts_uidp_org_user a inner join  ts_uidp_userinfo b on a.USER_ID=b.USER_ID
+	) tbl where LEADER_TYPE=2 and ORG_ID=a.ORG_ID) ChargeLeader FROM ts_uidp_org a";
+            }
+            if (GetDBType() == "SQLSERVER")
+            {
+                 sql = @"select a.*,(stuff((select ',' + '''u_' + USER_ID + '''' from(
+select a.USER_ID, a.ORG_ID, b.LEADER_TYPE from ts_uidp_org_user a inner
+                                         join ts_uidp_userinfo b on a.USER_ID = b.USER_ID
+
+) tbl where LEADER_TYPE = 1 and ORG_ID = a.ORG_ID for xml path('')),1,1,'')) Leader,(stuff((select ',' + '''u_' + USER_ID + '''' from(
+   select a.USER_ID, a.ORG_ID, b.LEADER_TYPE from ts_uidp_org_user a inner
+                                             join ts_uidp_userinfo b on a.USER_ID = b.USER_ID
+
+   ) tbl where LEADER_TYPE = 2 and ORG_ID = a.ORG_ID for xml path('')),1,1,'')) ChargeLeader FROM ts_uidp_org a";
+            }
+           
             return db.GetDataTable(sql);
         }
         public DataTable getOrgUser()

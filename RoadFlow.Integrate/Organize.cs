@@ -70,6 +70,8 @@ namespace RoadFlow.Integrate
                     objOrg.Id = new Guid(dr["ORG_ID"].ToString());
                     objOrg.ParentId = (dr["ORG_ID_UPPER"]==null|| dr["ORG_ID_UPPER"].ToString().Length==0) ? new Guid(): new Guid(dr["ORG_ID_UPPER"].ToString());
                     objOrg.Name = dr["ORG_NAME"].ToString();
+                    objOrg.Leader=dr["Leader"].ToString();
+                    objOrg.ChargeLeader = dr["ChargeLeader"].ToString();
                     objOrg.Type = 1;
                     objOrg.Note = dr["REMARK"].ToString();
                     objOrg.Status = int.Parse(dr["ISINVALID"].ToString());
@@ -133,23 +135,28 @@ namespace RoadFlow.Integrate
         public List<Model.WorkGroup> GetWorkGroupItem(DataTable dtRole, DataTable dtRoleUserOrg)
         {
             List<Model.WorkGroup> orgWorkGroupList = new List<Model.WorkGroup>();
+           
             try
             {
-                Model.WorkGroup objWorkGroup = new Model.WorkGroup();
                 foreach (DataRow dr in dtRole.Rows)
                 {
+                    Model.WorkGroup objWorkGroup = new Model.WorkGroup();
                     objWorkGroup.Id = new Guid(dr["GROUP_ID"].ToString());
                     objWorkGroup.Name = dr["GROUP_NAME"].ToString();
                     StringBuilder sb = new StringBuilder();
-                    foreach (DataRow drUserOrg in dtRoleUserOrg.Select("GROUP_ID ='" + dr["GROUP_ID"].ToString() + "'"))
+                    DataRow[] lstUserOrg = dtRoleUserOrg.Select("GROUP_ID ='" + objWorkGroup.Id.ToString() + "'");
+                    if (lstUserOrg.Count()>0)
                     {
-                        sb.Append(drUserOrg["ORG_ID"].ToString() + ",u_" + drUserOrg["USER_ID"].ToString() + ",");
+                        foreach (DataRow drUserOrg in lstUserOrg)
+                        {
+                            sb.Append(drUserOrg["ORG_ID"].ToString() + ",u_" + drUserOrg["USER_ID"].ToString() + ",");
+                        }
+                        string str = sb.ToString();
+                        str = str.Substring(0, str.Length - 1);
+                        objWorkGroup.Members = str;
+                        objWorkGroup.Note = dr["REMARK"].ToString();
+                        orgWorkGroupList.Add(objWorkGroup);
                     }
-                    string str = sb.ToString();
-                    str = str.Substring(0, str.Length - 1);
-                    objWorkGroup.Members = str;
-                    objWorkGroup.Note = dr["REMARK"].ToString();
-                    orgWorkGroupList.Add(objWorkGroup);
                 }
                 return orgWorkGroupList;
             }
