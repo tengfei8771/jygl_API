@@ -13,12 +13,12 @@ namespace UIDP.BIZModule.jyglModules
     {
         CBJHSQDB db = new CBJHSQDB();
 
-        public Dictionary<string,object> GetInfo(string XMBH, string XMMC, int page, int limit)
+        public Dictionary<string,object> GetInfo(string XMBH, string XMMC, int page, int limit,string userid)
         {
             Dictionary<string, object> r = new Dictionary<string, object>();
             try
             {
-                DataTable dt = db.GetInfo(XMBH, XMMC);
+                DataTable dt = db.GetInfo(XMBH, XMMC, userid);
                 if (dt.Rows.Count > 0)
                 {
                     r["code"] = 2000;

@@ -16,7 +16,7 @@ namespace JYGL.WebAPI.Controllers.jygl
     {
         CBJHSQModule CB = new CBJHSQModule();
         [HttpGet("GetInfo")]
-        public IActionResult GetInfo(string XMBH, string XMMC, int page, int limit) => Ok(CB.GetInfo(XMBH, XMMC, page, limit));
+        public IActionResult GetInfo(string XMBH, string XMMC, int page, int limit,string userid) => Ok(CB.GetInfo(XMBH, XMMC, page, limit, userid));
         [HttpPost("CreateInfo")]
         //public IActionResult CreateInfo([FromBody]JObject value,[FromBody]JArray list) => Ok(CB.CreateInfo(value.ToObject<Dictionary<string, object>>(), list.ToObject<List<Dictionary<string, object>>>()));
         public IActionResult CreateInfo([FromBody]JArray list) => Ok(CB.CreateInfo(list.ToObject<List<Dictionary<string, object>>>()));

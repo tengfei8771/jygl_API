@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Areas\RoadFlowCoreApi\Views\" />
     <Folder Include="Areas\RoadFlowCore\Data\" />
     <Folder Include="Areas\RoadFlowCore\Models\" />
     <Folder Include="Controllers\CangChu\" />
@@ -902,5 +903,7 @@
     <ProjectReference Include="..\UIDP.BIZModule\UIDP.BIZModule.csproj" />
     <ProjectReference Include="..\UIDP.LOG\UIDP.LOG\UIDP.LOG.csproj" />
   </ItemGroup>
+
+  <ProjectExtensions><VisualStudio><UserProperties appsettings_1development_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
 
 </Project>
