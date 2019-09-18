@@ -55,6 +55,10 @@ namespace WZGX.WebAPI.Controllers
             Dictionary<string, object> r = new Dictionary<string, object>();
             try
             {
+                if (!d.Keys.Contains("LEADER_TYPE")||d["LEADER_TYPE"] == null || d["LEADER_TYPE"].ToString() == "")
+                {
+                    d["LEADER_TYPE"] = 0;
+                }
                 d["USER_ID"] = Guid.NewGuid();
                 string b = mm.createUserArticle(d);
                 if (b == "")

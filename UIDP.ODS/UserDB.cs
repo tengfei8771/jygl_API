@@ -44,7 +44,7 @@ namespace UIDP.ODS
             list.Add(sql);
             StringBuilder sb = new StringBuilder();
             sb.Append("INSERT INTO ts_uidp_userinfo(USER_ID,USER_DOMAIN,USER_CODE,USER_NAME,USER_PASS,PHONE_MOBILE,PHONE_OFFICE," +
-                "USER_EMAIL,USER_SEX,AUTHENTICATION_TYPE,FLAG,REG_TIME,USER_TYPE,REMARK) VALUES(");
+                "USER_EMAIL,USER_SEX,AUTHENTICATION_TYPE,FLAG,REG_TIME,USER_TYPE,LEADER_TYPE,REMARK) VALUES(");
             sb.Append("'");
             sb.Append(d["USER_ID"] == null ? "" : d["USER_ID"] + "', ");
             sb.Append("'");
@@ -65,7 +65,8 @@ namespace UIDP.ODS
             sb.Append(d["AUTHENTICATION_TYPE"] == null ? "" : d["AUTHENTICATION_TYPE"] + ", ");
             sb.Append(d["FLAG"] == null ? "1" : d["FLAG"] + ", ");
             sb.Append("'"+DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") +"',");
-            sb.Append(d["USER_TYPE"]==null?"1" : d["USER_TYPE"].ToString()+",'");
+            sb.Append(d["USER_TYPE"]==null?"1" : d["USER_TYPE"].ToString()+",");
+            sb.Append(d["LEADER_TYPE"] == null ? "0" : d["LEADER_TYPE"].ToString() + ",'");
             sb.Append(d["REMARK"] == null ? "" : d["REMARK"] + "' )");
             list.Add(sb.ToString());
             return db.Executs(list);
@@ -155,6 +156,15 @@ namespace UIDP.ODS
             }
             else {
                 sb.Append("0");//管理员
+            }
+            sb.Append(",LEADER_TYPE=");
+            if (d["LEADER_TYPE"] == null || d["LEADER_TYPE"].ToString() == "")
+            {
+                sb.Append("0");//无
+            }
+            else
+            {
+                sb.Append(d["LEADER_TYPE"].ToString());//岗位类型
             }
             sb.Append(" where USER_ID='" + d["USER_ID"].ToString() + "' ");
             string sql= "UPDATE ts_uidp_org_user SET ORG_ID='"+d["orgId"] + "'";
