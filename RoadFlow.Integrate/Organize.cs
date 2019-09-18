@@ -72,7 +72,7 @@ namespace RoadFlow.Integrate
                     objOrg.Name = dr["ORG_NAME"].ToString();
                     objOrg.Leader=dr["Leader"].ToString();
                     objOrg.ChargeLeader = dr["ChargeLeader"].ToString();
-                    objOrg.Type = 1;
+                    objOrg.Type =2;
                     objOrg.Note = dr["REMARK"].ToString();
                     objOrg.Status = int.Parse(dr["ISINVALID"].ToString());
                     orgList.Add(objOrg);

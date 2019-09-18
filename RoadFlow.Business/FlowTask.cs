@@ -1876,7 +1876,7 @@ namespace RoadFlow.Business
             if (executeModel.ExecuteType != Model.FlowRunModel.Execute.Type.Save)
             {
                 //发送消息通知
-                SendMessage(executeResult.NextTasks, executeModel.Sender, "0,1,2,3", localizer: localizer);
+                //SendMessage(executeResult.NextTasks, executeModel.Sender, "0,1,2,3", localizer: localizer);
             }
             return executeResult;
         }
