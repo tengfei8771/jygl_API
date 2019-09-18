@@ -30,7 +30,7 @@ namespace UIDP.ODS.jyglDB
         public string CreateInfo(Dictionary<string,object> d)
         {
             List<string> sqllist = new List<string>();
-            string sql = "INSERT INTO jy_fybx (S_ID,BXDH,DWBM,S_OrgCode,FYXM,XMBH,SQSJ,BXSY,BXJEDX,BXJE,YJKJE,XFKJE,FKFS,FJZS,SKDW,KHH,YHZH,SPZT,CJR,CJSJ,IS_DELETE)values(";
+            string sql = "INSERT INTO jy_fybx (S_ID,BXDH,DWBM,S_OrgCode,FYXM,XMBH,SQSJ,BXSY,BXJEDX,BXJE,YJKJE,XFKJE,FKFS,FJZS,SKDW,KHH,YHZH,SPZT,CJR,CJSJ,IS_DELETE,PROCESS_STATE)values(";
             sql += GetSQLStr(Guid.NewGuid().ToString());
             sql += GetSQLStr(d["BXDH"]);
             sql += GetSQLStr(d["DWBM"]);
@@ -51,6 +51,7 @@ namespace UIDP.ODS.jyglDB
             sql += GetSQLStr(0, 1);
             sql += GetSQLStr(d["CJR"]);
             sql += GetSQLStr(DateTime.Now);
+            sql += GetSQLStr(0, 1);
             sql += GetSQLStr(0, 1);
             sql = sql.TrimEnd(',');
             sql += ")";

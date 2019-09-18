@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Text;
+using UIDP.ODS.jyglDB;
+using UIDP.UTILITY;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -129,7 +131,7 @@ namespace WZGX.WebAPI.Controllers.jygl
         /// <param name="isFreeSend">是否是自由发送(false)</param>
         /// <returns></returns>
         [HttpPost("sendFlow")]
-        public IActionResult sendFlow(string systemcode, string stepid, string flowid, string taskid, string instanceid, string senderid, string tasktitle, string comment, string type, bool isFreeSend)
+        public IActionResult sendFlow(string systemcode, string stepid, string flowid, string taskid, string instanceid, string senderid, string tasktitle, string comment, string type, bool isFreeSend,int formtype)
         {
 
             Dictionary<string, object> r = new Dictionary<string, object>();
@@ -215,7 +217,7 @@ namespace WZGX.WebAPI.Controllers.jygl
             executeModel.Comment = comment;
             executeModel.ExecuteType = flowTask.GetExecuteType(type);
             executeModel.FlowId = flowGuid;
-            executeModel.InstanceId = instanceId;
+            executeModel.InstanceId = instanceid;
             executeModel.Sender = sender;
             executeModel.Title = tasktitle;
             if (null != currentTask)
@@ -265,9 +267,66 @@ namespace WZGX.WebAPI.Controllers.jygl
             RoadFlow.Model.FlowRunModel.ExecuteResult executeResult = flowTask.Execute(executeModel);
             int errCode = executeResult.IsSuccess ? 0 : 2001;
             string errMsg = executeResult.Messages;
-            r["code"] = errCode;
-            r["message"] = errMsg;
-            r["data"] = JObject.FromObject(executeResult);
+            //r["code"] = errCode;
+            //r["message"] = errMsg;
+            //r["data"] = JObject.FromObject(executeResult);
+            if (errCode == 0)
+            {
+                DBTool db = new DBTool("");
+                if (formtype == 0)
+                {
+                    string sql = "UPDATE jy_cbjh set PROCESS_STATE={0} where XMBH='" + instanceid + "'";
+                    int status = 0;
+                    if (steps != null)
+                    {
+                        status = 1;
+                    }
+                    else
+                    {
+                        status = 2;
+                    }
+                    sql = string.Format(sql, status);
+                    if (db.ExecutByStringResult(sql) == "")
+                    {
+                        r["code"] = 2000;
+                        r["message"] = "流程流转成功！";
+                    }
+                    else
+                    {
+                        r["code"] = -1;
+                        r["message"] = "失败！";
+                    }
+                }
+                else
+                {
+                    string sql = "UPDATE jy_fybx set PROCESS_STATE={0} where S_ID='" + instanceid + "'";
+                    int status = 0;
+                    if (steps != null)
+                    {
+                        status = 1;
+                    }
+                    else
+                    {
+                        status = 2;
+                    }
+                    sql = string.Format(sql, status);
+                    if (db.ExecutByStringResult(sql) == "")
+                    {
+                        r["code"] = 2000;
+                        r["message"] = "流程流转成功！";
+                    }
+                    else
+                    {
+                        r["code"] = -1;
+                        r["message"] = "失败！";
+                    }
+                }
+            }
+            else
+            {
+                r["code"] = errCode;
+                r["message"] = errMsg;
+            }
             return Json(r);
             #endregion
         }
