@@ -370,10 +370,10 @@ namespace UIDP.BIZModule.jyglModules
 
         public string CreateXMBH()
         {
-            string timeSpan = DateTime.Now.ToString("yyyyMMdd");
+            string timeSpan = "CL"+ DateTime.Now.ToString("yyyyMMddhhmmss");
             string RandomStr = "ABCDEFGHIGKLMNOPQRSTUVWXYZ0123456789";
             Random rd = new Random();
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 4; i++)
             {
                 timeSpan += RandomStr[rd.Next(0, RandomStr.Length - 1)];
             }

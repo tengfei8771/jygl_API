@@ -24,6 +24,7 @@ namespace UIDP.ODS.jyglDB
                 DateTime edate = Convert.ToDateTime(d["S_EndDate"].ToString());
                 sql += "and  SQSJ BETWEEN '" + bdate.ToString("yyyy-MM-dd") + "' AND '" + edate.ToString("yyyy-MM-dd") + "'";
             }
+            sql += " AND CJR='" + d["userid"] + "'";
             return db.GetDataTable(sql);
         }
 

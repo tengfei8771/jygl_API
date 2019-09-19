@@ -16,7 +16,7 @@ namespace JYGL.WebAPI.Controllers.jygl
     {
         FYBXModule FB = new FYBXModule();
         [HttpGet("GetInfo")]
-        public IActionResult GetInfo(string BXDH, string S_BeginDate,string S_EndDate, int page, int limit)// => Ok(FB.GetInfo(XMBH, XMMC, page, limit));
+        public IActionResult GetInfo(string BXDH, string S_BeginDate,string S_EndDate, int page, int limit,string userid)// => Ok(FB.GetInfo(XMBH, XMMC, page, limit));
         {
             Dictionary<string, object> d = new Dictionary<string, object>();
             d["limit"] = limit;
@@ -24,6 +24,7 @@ namespace JYGL.WebAPI.Controllers.jygl
             d["BXDH"] = BXDH;
             d["S_BeginDate"] = S_BeginDate;
             d["S_EndDate"] = S_EndDate;
+            d["userid"] = userid;
             Dictionary<string, object> res = FB.GetInfo(d);
             return Ok(res);
         }

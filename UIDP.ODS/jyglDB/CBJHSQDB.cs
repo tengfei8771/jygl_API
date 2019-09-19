@@ -10,7 +10,7 @@ namespace UIDP.ODS.jyglDB
     {
         DBTool db = new DBTool("");
 
-        public DataTable GetInfo(string XMBH,string XMMC,string userid)
+        public DataTable GetInfo(string XMBH,string XMMC,string userid,int type)
         {
             string sql = " SELECT a.*,b.Name as PC ,c.Name as LB FROM jy_cbjh a left join tax_dictionary b on a.XMPC=b.Code left join tax_dictionary c on c.Code=a.XMLB WHERE a.IS_DELETE=0";
             if (!string.IsNullOrEmpty(XMBH))
@@ -21,8 +21,12 @@ namespace UIDP.ODS.jyglDB
             {
                 sql += " AND a.XMMC='" + XMMC + "'";
             }
-            sql += " AND CJR='" + userid + "'";
+            if (type == 0)
+            {
+                sql += " AND CJR='" + userid + "'";
+            }
             //sql += " LIMIT " + (page - 1) * limit + "," + limit;
+            ///待添加功能，只有流程审批完成后才能选择项目，sql+=" PROCESS_STATE=2"
             return db.GetDataTable(sql);
         }
 

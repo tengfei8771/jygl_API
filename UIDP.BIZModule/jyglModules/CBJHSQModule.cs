@@ -13,12 +13,12 @@ namespace UIDP.BIZModule.jyglModules
     {
         CBJHSQDB db = new CBJHSQDB();
 
-        public Dictionary<string,object> GetInfo(string XMBH, string XMMC, int page, int limit,string userid)
+        public Dictionary<string,object> GetInfo(string XMBH, string XMMC, int page, int limit,string userid,int type)
         {
             Dictionary<string, object> r = new Dictionary<string, object>();
             try
             {
-                DataTable dt = db.GetInfo(XMBH, XMMC, userid);
+                DataTable dt = db.GetInfo(XMBH, XMMC, userid,type);
                 if (dt.Rows.Count > 0)
                 {
                     r["code"] = 2000;
@@ -269,10 +269,10 @@ namespace UIDP.BIZModule.jyglModules
 
         public string CreateXMBH()
         {
-            string timeSpan = DateTime.Now.ToString("yyyyMMdd");
+            string timeSpan = "CB"+DateTime.Now.ToString("yyyyMMddhhmmss");
             string RandomStr = "ABCDEFGHIGKLMNOPQRSTUVWXYZ0123456789";
             Random rd = new Random();
-            for(int i = 0; i < 3; i++)
+            for(int i = 0; i < 4; i++)
             {
                 timeSpan += RandomStr[rd.Next(0, RandomStr.Length - 1)];
             }
