@@ -8,7 +8,6 @@ using System.Data;
 using System.IO;
 using System.Net;
 using System.Text;
-using UIDP.ODS.jyglDB;
 using UIDP.UTILITY;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -134,7 +133,7 @@ namespace WZGX.WebAPI.Controllers.jygl
         /// <param name="formtype">0：成本计划 1：费用报销模块</param>
         /// <returns></returns>
         [HttpPost("sendFlow")]
-        public IActionResult sendFlow(string systemcode, string stepid, string flowid, string taskid, string instanceid, string senderid, string tasktitle, string comment, string type, bool isFreeSend,int formtype)
+        public IActionResult sendFlow(string systemcode, string stepid, string flowid, string taskid, string instanceid, string senderid, string tasktitle, string comment, string type, bool isFreeSend, int formtype)
         {
             Dictionary<string, object> r = new Dictionary<string, object>();
             #region 获取流程步骤
@@ -259,8 +258,8 @@ namespace WZGX.WebAPI.Controllers.jygl
                     //string parallelorserial = step.Value<string>("parallelorserial");//0并且 1串行
                     //List<RoadFlow.Model.User> users = organize.GetAllUsers(step.Value<string>("users"));
                     string stepName = step["name"].ToString();
-                    string beforeStepId = step["beforestepid"]==null?null: step["beforestepid"].ToString();//原步骤ID(动态步骤的原步骤ID)
-                    string parallelorserial = step["parallelorserial"]==null?null: step["parallelorserial"].ToString();//0并且 1串行
+                    string beforeStepId = step["beforestepid"] == null ? null : step["beforestepid"].ToString();//原步骤ID(动态步骤的原步骤ID)
+                    string parallelorserial = step["parallelorserial"] == null ? null : step["parallelorserial"].ToString();//0并且 1串行
                     List<RoadFlow.Model.User> users = organize.GetAllUsers(step["users"].ToString());
                     string datetTime = step.Value<string>("completedtime");
                     nextSteps.Add((stepId, stepName,
@@ -494,21 +493,21 @@ namespace WZGX.WebAPI.Controllers.jygl
         #region 回退流程
 
         [HttpPost("backFlow")]
-        public IActionResult backFlow(string systemcode, string flowid, string instanceid, string senderid, string tasktitle, string comment, int formtype)
+        public IActionResult backFlow(string systemcode, string flowid, string taskid, string instanceid, string senderid, string tasktitle, string comment, int formtype)
         {
             Dictionary<string, object> r = new Dictionary<string, object>();
             DataTable firsttesp = new DataTable();
             RoadFlow.Business.FlowTask flowTask = new RoadFlow.Business.FlowTask();
-            var taskid = string.Empty;
+            //var taskid = string.Empty;
             #region 获取流程第一步步骤
             using (RoadFlow.Mapper.DataContext context = new RoadFlow.Mapper.DataContext())
             {
-                firsttesp=context.GetDataTable("select top 1 * from RF_FlowTask where InstanceId = '"+ instanceid + "' ORDER BY ReceiveTime ");
+                firsttesp = context.GetDataTable("select top 1 * from RF_FlowTask where InstanceId = '" + instanceid + "' ORDER BY ReceiveTime ");
             }
-            if (firsttesp!=null&& firsttesp.Rows.Count==1)
-            {
-                taskid = firsttesp.Rows[0]["Id"].ToString();
-            }
+            //if (firsttesp!=null&& firsttesp.Rows.Count==1)
+            //{
+            //    taskid = firsttesp.Rows[0]["Id"].ToString();
+            //}
             var flowRunModel = new RoadFlow.Business.Flow().GetFlowRunModel(new Guid(flowid));
             if (null == flowRunModel)
             {
@@ -519,7 +518,7 @@ namespace WZGX.WebAPI.Controllers.jygl
             JArray jArray = new JArray();
             Guid groupId = Guid.Empty;
             string instanceId = string.Empty;
-         
+
             foreach (DataRow step in firsttesp.Rows)
             {
                 JObject jObject1 = new JObject
@@ -631,7 +630,7 @@ namespace WZGX.WebAPI.Controllers.jygl
                 {
                     string sql = "UPDATE jy_cbjh set PROCESS_STATE={0} where XMBH='" + instanceid + "'";
                     int status = 3;
-                   
+
                     sql = string.Format(sql, status);
                     if (db.ExecutByStringResult(sql) == "")
                     {
@@ -682,9 +681,76 @@ namespace WZGX.WebAPI.Controllers.jygl
 
 
         #region 撤销流程
+        //后期可以考虑递归撤回
+        //public string getTaskId(DataTable dt,string taskid)
+        //{
+
+        //    string s=string.Empty;
+
+        //    DataRow[] dr=dt.Select("previd ='" + taskid + "'");
+        //    if (dr.Length>0)
+        //    {
+        //        s = "'" + dr[0]["Id"].ToString() + "',";
+        //    }
+        //    return s;
+        //}
+        [HttpPost("revokeFlow")]
+        public IActionResult revokeFlow(string instanceid, string senderid, int formtype)
+        {
+            Dictionary<string, object> r = new Dictionary<string, object>();
+            DataTable firsttesp = new DataTable();
+            RoadFlow.Business.FlowTask flowTask = new RoadFlow.Business.FlowTask();
+            var taskid = string.Empty;
+            using (RoadFlow.Mapper.DataContext context = new RoadFlow.Mapper.DataContext())
+            {
+                firsttesp = context.GetDataTable("select top 1 * from RF_FlowTask where Status =2 and InstanceId = '" + instanceid + "' and ReceiveId='" + senderid + "' ORDER BY ReceiveTime desc");
+            }
+            if (firsttesp != null && firsttesp.Rows.Count == 1)
+            {
+                taskid = firsttesp.Rows[0]["Id"].ToString();
+            }
+
+            if (!string.IsNullOrEmpty(taskid) && !string.IsNullOrEmpty(instanceid))
+            {
+                DBTool db = new DBTool("");
+                string flag = db.ExecutByStringResult("select  count(1) from RF_FlowTask where previd = '" + taskid + "' and Status in(0,1) ");//判断是否可以撤回
+                if (!string.IsNullOrEmpty(flag))
+                {
+                    string updateSql = string.Empty;
+                    string revokeSql = "delete from  RF_FlowTask where InstanceId = '" + instanceid + "' and (previd ='" + taskid + "' or id='" + taskid + "')";
+                    if (formtype == 0)
+                    {
+                        updateSql = "UPDATE jy_cbjh set PROCESS_STATE=0 where XMBH='" + instanceid + "'";
+                    }
+                    else
+                    {
+                        updateSql = "UPDATE jy_fybx set PROCESS_STATE=0 where BXDH='" + instanceid + "'";
+                    }
+                    List<string> list = new List<string>();
+                    list.Add(revokeSql);
+                    list.Add(updateSql);
+                    string result = db.Executs(list);
+                    if (result == "")
+                    {
+                        r["code"] = 2000;
+                        r["message"] = "审批已撤回！";
+                    }
+                }
+                else
+                {
+                    r["code"] = -1;
+                    r["message"] = "撤销失败！流程已被审批！";
+                }
+
+            }
+            else
+            {
+                r["code"] = -1;
+                r["message"] = "撤销失败！参数异常！";
+            }
+
+            return Json(r);
+        }
         #endregion
-
-
-
     }
 }
