@@ -302,9 +302,33 @@ namespace WZGX.WebAPI.Controllers.jygl
                         r["message"] = "失败！";
                     }
                 }
-                else
+                else if(formtype == 1)
                 {
                     string sql = "UPDATE jy_fybx set PROCESS_STATE={0} where BXDH='" + instanceid + "'";
+                    int status = 0;
+                    if (steps != null)
+                    {
+                        status = 1;
+                    }
+                    else
+                    {
+                        status = 2;
+                    }
+                    sql = string.Format(sql, status);
+                    if (db.ExecutByStringResult(sql) == "")
+                    {
+                        r["code"] = 2000;
+                        r["message"] = "流程流转成功！";
+                    }
+                    else
+                    {
+                        r["code"] = -1;
+                        r["message"] = "失败！";
+                    }
+                }
+                else
+                {
+                    string sql = "UPDATE jy_clbx set PROCESS_STATE={0} where CLBH='" + instanceid + "'";
                     int status = 0;
                     if (steps != null)
                     {
@@ -713,7 +737,7 @@ namespace WZGX.WebAPI.Controllers.jygl
             if (!string.IsNullOrEmpty(taskid) && !string.IsNullOrEmpty(instanceid))
             {
                 DBTool db = new DBTool("");
-                string flag = db.ExecutByStringResult("select  count(1) from RF_FlowTask where previd = '" + taskid + "' and Status in(0,1) ");//判断是否可以撤回
+                string flag = db.GetString("select  count(1) from RF_FlowTask where previd = '" + taskid + "' and Status in(0,1) ");//判断是否可以撤回
                 if (!string.IsNullOrEmpty(flag))
                 {
                     string updateSql = string.Empty;

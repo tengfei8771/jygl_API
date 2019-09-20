@@ -23,6 +23,7 @@ namespace UIDP.BIZModule.jyglModules
                     r["message"] = "success";
                     r["items"] = KVTool.GetPagedTable(dt, page, limit);
                     r["total"] = dt.Rows.Count;
+
                 }
                 else
                 {
@@ -277,6 +278,7 @@ namespace UIDP.BIZModule.jyglModules
                 {
                     r["code"] = 2000;
                     r["message"] = "success";
+                    r["CLBH"] = d["CLBH"];
                 }
                 else
                 {
