@@ -55,6 +55,7 @@ namespace UIDP.BIZModule.jyglModules
                 {
                     r["code"] = 2000;
                     r["message"] = "success";
+                    r["XMBH"] = XMBH;
                 }
                 else
                 {

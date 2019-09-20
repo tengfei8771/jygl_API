@@ -10,13 +10,14 @@ namespace UIDP.ODS.jyglDB
     public class TravelExpenseDB
     {
         DBTool db = new DBTool("");
-        public DataTable GetInfo(string CLBH)
+        public DataTable GetInfo(string CLBH,string userid)
         {
             string sql = " select * from jy_clbx where IS_DELETE=0";
             if (!String.IsNullOrEmpty(CLBH))
             {
                 sql += " and CLBH='" + CLBH + "'";
             }
+            sql += " and CJR='" + userid + "'";
             return db.GetDataTable(sql);
         }
 
@@ -34,7 +35,7 @@ namespace UIDP.ODS.jyglDB
         public string CreateInfo(Dictionary<string,object> d)
         {
             List<string> sqllist = new List<string>();
-            string sql = " INSERT INTO jy_clbx (CLBH,DWBM,CCXM,CCSY,CCKSSJ,CCJSSJ,CCTS,HJJE,HJDX,YJCLF,YTBJE,REMARK,SKRXM,CJR,CJSJ,IS_DELETE,XMBH,XMMC,DWMC) VALUES (";
+            string sql = " INSERT INTO jy_clbx (CLBH,DWBM,CCXM,CCSY,CCKSSJ,CCJSSJ,CCTS,HJJE,HJDX,YJCLF,YTBJE,REMARK,SKRXM,CJR,CJSJ,IS_DELETE,XMBH,XMMC,DWMC,PROCESS_STATE) VALUES (";
             sql += GetSQLStr(d["CLBH"]);
             sql += GetSQLStr(d["DWBM"]);
             sql += GetSQLStr(d["CCXM"]);
@@ -54,6 +55,7 @@ namespace UIDP.ODS.jyglDB
             sql += GetSQLStr(d["XMBH"]);
             sql += GetSQLStr(d["XMMC"]);
             sql += GetSQLStr(d["DWMC"]);
+            sql += GetSQLStr(0, 1);
             sql = sql.TrimEnd(',');
             sql += ")";
             sqllist.Add(sql);

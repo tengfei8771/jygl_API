@@ -11,12 +11,12 @@ namespace UIDP.BIZModule.jyglModules
     public class TravelExpenseModule
     {
         TravelExpenseDB db = new TravelExpenseDB();
-        public Dictionary<string, object> GetInfo(string CLBH,int page,int limit)
+        public Dictionary<string, object> GetInfo(string CLBH,int page,int limit,string userid)
         {
             Dictionary<string, object> r = new Dictionary<string, object>();
             try
             {
-                DataTable dt = db.GetInfo(CLBH);
+                DataTable dt = db.GetInfo(CLBH,userid);
                 if (dt.Rows.Count > 0)
                 {
                     r["code"] = 2000;

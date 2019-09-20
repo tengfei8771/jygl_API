@@ -16,7 +16,7 @@ namespace JYGL.WebAPI.Controllers.jygl
     {
         TravelExpenseModule TE = new TravelExpenseModule();
         [HttpGet("GetInfo")]
-        public IActionResult GetInfo(string CLBH, int page, int limit) => Ok(TE.GetInfo(CLBH,page, limit));
+        public IActionResult GetInfo(string CLBH, int page, int limit,string userid) => Ok(TE.GetInfo(CLBH,page, limit,userid));
         [HttpGet("GetCLXCInfo")]
         public IActionResult GetCLXCInfo(string CLBH) => Ok(TE.GetCLXCInfo(CLBH));
         [HttpPost("CreateInfo")]
