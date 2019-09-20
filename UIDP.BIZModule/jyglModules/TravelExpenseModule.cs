@@ -279,6 +279,7 @@ namespace UIDP.BIZModule.jyglModules
                     r["code"] = 2000;
                     r["message"] = "success";
                     r["CLBH"] = d["CLBH"];
+                    //r["XMBH"] = d["XMBH"];
                 }
                 else
                 {

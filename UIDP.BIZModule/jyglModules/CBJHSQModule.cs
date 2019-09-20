@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -265,8 +266,64 @@ namespace UIDP.BIZModule.jyglModules
             }
         }
 
+        public Dictionary<string,object> UpdateAddCBJHJE(JObject obj)
+        {
+            Dictionary<string, object> res = new Dictionary<string, object>();
+            string id = obj.Value<string>("XMBH");
+            decimal JE = JE = obj.Value<decimal>("BXJE");
+            try
+            {
+                string b = db.UpdateAddCBJHJE(id,JE);
+                if (b == "")
+                {
+                    res["code"] = 2000;
+                    res["message"] = "成功!";
+                }
+                else
+                {
+                    res["code"] = -1;
+                    res["message"] = "失败！";
+                }
+            }
+            catch(Exception e)
+            {
+                res["message"] = e.Message;
+                res["code"] = -1;
+            }
+            return res;
+        }
 
-       
+
+        public Dictionary<string, object> UpdateDesCBJHJE(JObject obj)
+        {
+            Dictionary<string, object> res = new Dictionary<string, object>();
+            string id = obj.Value<string>("XMBH");
+            decimal JE = JE = obj.Value<decimal>("BXJE");
+            try
+            {
+                string b = db.UpdateDesCBJHJE(id, JE);
+                if (b == "")
+                {
+                    res["code"] = 2000;
+                    res["message"] = "成功!";
+                }
+                else
+                {
+                    res["code"] = -1;
+                    res["message"] = "失败！";
+                }
+            }
+            catch (Exception e)
+            {
+                res["message"] = e.Message;
+                res["code"] = -1;
+            }
+            return res;
+        }
+
+
+
+
 
         public string CreateXMBH()
         {

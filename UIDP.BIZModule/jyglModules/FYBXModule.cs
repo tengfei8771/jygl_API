@@ -47,6 +47,7 @@ namespace UIDP.BIZModule.jyglModules
                     r["code"] = 2000;
                     r["message"] = "success";
                     r["BXDH"] = BXDH;
+                    r["BXJE"] = d["BXJE"];
                 }
                 else
                 {

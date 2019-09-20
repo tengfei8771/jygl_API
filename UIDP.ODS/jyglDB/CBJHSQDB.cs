@@ -169,6 +169,18 @@ namespace UIDP.ODS.jyglDB
 
         //根据报销金额更新
 
+        public string UpdateAddCBJHJE(string id,decimal BXJE)
+        {
+            string sql = "UPDATE jy_cbjh set YBXJE=CASE WHEN YBXJE IS NULL THEN " + BXJE + " ELSE YBXJE+" + BXJE + " END WHERE XMBH='" + id + "'";
+            return db.ExecutByStringResult(sql);
+        }
+
+        public string UpdateDesCBJHJE(string id, decimal BXJE)
+        {
+            string sql = "UPDATE jy_cbjh set YBXJE=CASE WHEN YBXJE IS NULL THEN " + BXJE + " ELSE YBXJE-" + BXJE + " END WHERE XMBH='" + id + "'";
+            return db.ExecutByStringResult(sql);
+        }
+
         public string GetSQLStr(object s,int flag=0)
         {
             string sql = string.Empty;

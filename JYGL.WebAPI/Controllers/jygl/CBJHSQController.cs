@@ -34,8 +34,11 @@ namespace JYGL.WebAPI.Controllers.jygl
 
         [HttpGet("GetYearProject")]
         public IActionResult GetYearProject() => Ok(CB.GetYearProject());
+        [HttpPost("UpdateAddCBJHJE")]
+        public IActionResult UpdateAddCBJHJE([FromBody]JObject value) => Ok(CB.UpdateAddCBJHJE(value));
 
-
+        [HttpPost("UpdateDesCBJHJE")]
+        public IActionResult UpdateDesCBJHJE([FromBody]JObject value) => Ok(CB.UpdateDesCBJHJE(value));
 
 
 
