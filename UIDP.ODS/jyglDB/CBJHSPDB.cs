@@ -39,5 +39,11 @@ WHERE a.IS_DELETE=0 and c.Status IN(0,1) ";
             string sql = "select * from jy_cbwz where XMBH='" + XMBH + "' AND IS_DELETE=0";
             return db.GetDataTable(sql);
         }
+
+        public string UpdateSFCW(string XMBH,string sfcw)
+        {
+            string sql = "UPDATE jy_cbjh set SFCW="+ sfcw + " WHERE XMBH='" + XMBH+"'";
+            return db.ExecutByStringResult(sql);
+        }
     }
 }

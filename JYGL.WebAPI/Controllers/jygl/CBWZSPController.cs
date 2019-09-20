@@ -18,5 +18,8 @@ namespace JYGL.WebAPI.Controllers.jygl
 
         [HttpGet("GetDetailInfo")]
         public IActionResult GetDetailInfo(string XMBH) => Ok(SP.GetDetailInfo(XMBH));
+
+        [HttpGet("UpdateSFCW")]
+        public IActionResult UpdateSFCW(string XMBH, string sfcw) => Ok(SP.UpdateSFCW( XMBH,  sfcw));
     }
 }

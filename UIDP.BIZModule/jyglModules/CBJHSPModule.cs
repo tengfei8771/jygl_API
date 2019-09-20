@@ -67,5 +67,31 @@ namespace UIDP.BIZModule.jyglModules
             }
             return r;
         }
+
+        public Dictionary<string, object> UpdateSFCW(string XMBH, string sfcw)
+        {
+            Dictionary<string, object> r = new Dictionary<string, object>();
+            try
+            {
+                string result = db.UpdateSFCW(XMBH, sfcw);
+                if (result == "")
+                {
+                    r["code"] = 2000;
+                    r["message"] = "更新数据成功！";
+               
+                }
+                else
+                {
+                    r["code"] = -1;
+                    r["message"] = "更新数据失败！";
+                }
+            }
+            catch (Exception e)
+            {
+                r["code"] = -1;
+                r["message"] = e.Message;
+            }
+            return r;
+        }
     }
 }
