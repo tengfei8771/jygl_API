@@ -299,6 +299,7 @@ namespace RoadFlow.Business
                     users.AddRange(workGroup.GetAllUsers(id.RemoveWorkGroupPrefix().ToGuid()));
                 }
             }
+            var y=users.Distinct(new Model.User()).ToList();
             return users.Distinct(new Model.User()).ToList();
         }
         /// <summary>

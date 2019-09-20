@@ -14,7 +14,7 @@ namespace JYGL.WebAPI.Controllers.jygl
     {
         CBJHSPModule SP = new CBJHSPModule();
         [HttpGet("GetInfo")]
-        public IActionResult GetInfo(string XMBH, string XMMC, int page, int limit) => Ok(SP.GetInfo(XMBH, XMMC, page, limit));
+        public IActionResult GetInfo(string XMBH, string XMMC, int page, int limit,string userid) => Ok(SP.GetInfo(XMBH, XMMC, page, limit, userid));
 
         [HttpGet("GetDetailInfo")]
         public IActionResult GetDetailInfo(string XMBH) => Ok(SP.GetDetailInfo(XMBH));

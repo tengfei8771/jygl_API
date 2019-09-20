@@ -186,11 +186,11 @@ where a.ISDELETE='1' order by ORG_CODE";
             }
             if (GetDBType() == "SQLSERVER")
             {
-                 sql = @"select a.*,(stuff((select ',' + '''u_' + USER_ID + '''' from(
+                 sql = @"select a.*,(stuff((select ',' + 'u_' + USER_ID + '' from(
 select a.USER_ID, a.ORG_ID, b.LEADER_TYPE from ts_uidp_org_user a inner
                                          join ts_uidp_userinfo b on a.USER_ID = b.USER_ID
 
-) tbl where LEADER_TYPE = 1 and ORG_ID = a.ORG_ID for xml path('')),1,1,'')) Leader,(stuff((select ',' + '''u_' + USER_ID + '''' from(
+) tbl where LEADER_TYPE = 1 and ORG_ID = a.ORG_ID for xml path('')),1,1,'')) Leader,(stuff((select ',' + 'u_' + USER_ID + '' from(
    select a.USER_ID, a.ORG_ID, b.LEADER_TYPE from ts_uidp_org_user a inner
                                              join ts_uidp_userinfo b on a.USER_ID = b.USER_ID
 
