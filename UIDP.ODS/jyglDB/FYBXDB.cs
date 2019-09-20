@@ -112,5 +112,32 @@ namespace UIDP.ODS.jyglDB
                 }
             }
         }
+        /// <summary>
+        /// 查询费用审批列表
+        /// </summary>
+        /// <param name="XMBH"></param>
+        /// <param name="XMMC"></param>
+        /// <param name="userid"></param>
+        /// <returns></returns>
+        public DataTable GetFYSPInfo(string BXDH, string FYXM, string userid)
+        {
+            string sql = @"SELECT a.*,c.Id,c.FlowId,c.FlowName,c.StepId,c.StepName,c.InstanceId,c.GroupId,c.TaskType,c.Title,c.SenderId,c.SenderName,c.ReceiveTime,c.CompletedTime,c.Status,c.Note 
+                        FROM jy_fybx a 
+                         join RF_FlowTask c on a.BXDH=c.InstanceId and LEFT(a.BXDH,2)='FY'
+                        WHERE a.IS_DELETE=0 and c.Status IN(0,1) ";
+            if (!string.IsNullOrEmpty(userid))
+            {
+                sql += " AND c.ReceiveId ='" + userid.ToUpper() + "'";
+            }
+            if (!string.IsNullOrEmpty(BXDH))
+            {
+                sql += " AND a.BXDH LIKE'" + BXDH + "%'";
+            }
+            if (!string.IsNullOrEmpty(FYXM))
+            {
+                sql += " AND a.FYXM='" + FYXM + "'";
+            }
+            return db.GetDataTable(sql);
+        }
     }
 }

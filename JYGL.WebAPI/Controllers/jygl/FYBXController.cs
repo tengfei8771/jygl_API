@@ -36,6 +36,16 @@ namespace JYGL.WebAPI.Controllers.jygl
 
         [HttpPost("DeleteInfo")]
         public IActionResult DeleteInfo([FromBody]JObject value) => Ok(FB.DeleteInfo(value.ToObject<Dictionary<string, object>>()));
-
+        /// <summary>
+        /// 费用审批查询列表
+        /// </summary>
+        /// <param name="XMBH"></param>
+        /// <param name="XMMC"></param>
+        /// <param name="page"></param>
+        /// <param name="limit"></param>
+        /// <param name="userid"></param>
+        /// <returns></returns>
+        [HttpGet("GetFYSPInfo")]
+        public IActionResult GetFYSPInfo(string BXDH, string FYXM, int page, int limit, string userid) => Ok(FB.GetFYSPInfo(BXDH, FYXM, page, limit, userid));
     }
 }
