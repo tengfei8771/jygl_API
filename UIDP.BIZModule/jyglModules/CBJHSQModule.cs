@@ -23,14 +23,14 @@ namespace UIDP.BIZModule.jyglModules
                 if (dt.Rows.Count > 0)
                 {
                     r["code"] = 2000;
-                    r["message"] = "success";
+                    r["message"] = "操作成功！";
                     r["items"] = KVTool.GetPagedTable(dt, page, limit);
                     r["total"] = dt.Rows.Count;
                 }
                 else
                 {
                     r["code"] = 2000;
-                    r["message"] = "success,but no info ";
+                    r["message"] = "暂无数据！";
                     r["total"] = dt.Rows.Count;
                 }
             }
@@ -55,7 +55,7 @@ namespace UIDP.BIZModule.jyglModules
                 if (b == "")
                 {
                     r["code"] = 2000;
-                    r["message"] = "success";
+                    r["message"] = "操作成功！";
                     r["XMBH"] = XMBH;
                 }
                 else
@@ -85,7 +85,7 @@ namespace UIDP.BIZModule.jyglModules
                 if (b == "")
                 {
                     r["code"] = 2000;
-                    r["message"] = "success";
+                    r["message"] = "操作成功！";
                 }
                 else
                 {
@@ -111,7 +111,7 @@ namespace UIDP.BIZModule.jyglModules
                 if (b == "")
                 {
                     r["code"] = 2000;
-                    r["message"] = "success";
+                    r["message"] = "操作成功！";
                 }
                 else
                 {
@@ -136,14 +136,14 @@ namespace UIDP.BIZModule.jyglModules
                 if (dt.Rows.Count > 0)
                 {
                     r["code"] = 2000;
-                    r["message"] = "success";
+                    r["message"] = "操作成功！";
                     r["items"] = dt;
                     r["total"] = dt.Rows.Count;
                 }
                 else
                 {
                     r["code"] = 2000;
-                    r["message"] = "success,but no info ";
+                    r["message"] = "暂无数据！ ";
                     r["total"] = dt.Rows.Count;
                 }
             }
@@ -164,7 +164,7 @@ namespace UIDP.BIZModule.jyglModules
                 if (b == "")
                 {
                     r["code"] = 2000;
-                    r["message"] = "success";
+                    r["message"] = "操作成功！";
                 }
                 else
                 {
@@ -188,7 +188,7 @@ namespace UIDP.BIZModule.jyglModules
                 List<ConfigNode> list = CreateNode(code);
                 d["code"] = 2000;
                 d["items"] = list;
-                d["message"] = "success";
+                d["message"] = "操作成功！";
             }
             catch(Exception e)
             {
@@ -207,14 +207,14 @@ namespace UIDP.BIZModule.jyglModules
                 if (dt.Rows.Count > 0)
                 {
                     r["code"] = 2000;
-                    r["message"] = "success";
+                    r["message"] = "操作成功！";
                     r["items"] = dt;
                     r["total"] = dt.Rows.Count;
                 }
                 else
                 {
                     r["code"] = 2000;
-                    r["message"] = "success,but no info ";
+                    r["message"] = "暂无数据！";
                     r["total"] = dt.Rows.Count;
                 }
             }
@@ -277,12 +277,12 @@ namespace UIDP.BIZModule.jyglModules
                 if (b == "")
                 {
                     res["code"] = 2000;
-                    res["message"] = "成功!";
+                    res["message"] = "操作成功！";
                 }
                 else
                 {
                     res["code"] = -1;
-                    res["message"] = "失败！";
+                    res["message"] = "操作失败！";
                 }
             }
             catch(Exception e)
@@ -305,12 +305,12 @@ namespace UIDP.BIZModule.jyglModules
                 if (b == "")
                 {
                     res["code"] = 2000;
-                    res["message"] = "成功!";
+                    res["message"] = "操作成功！";
                 }
                 else
                 {
                     res["code"] = -1;
-                    res["message"] = "失败！";
+                    res["message"] = "操作失败！";
                 }
             }
             catch (Exception e)

@@ -46,7 +46,11 @@ namespace UIDP.ODS.jyglDB
             sql += GetSQLStr(DateTime.Now);
             sql = sql.TrimEnd(',');
             sql += ")";
-            return db.ExecutByStringResult(sql);
+            string updatesql = "update jy_cbjh set TZHJHZJE=TZHJHZJE+"+ d["TZJE"].ToString() + " where XMBH='" + d["XMBH"].ToString() + "'";
+            sqllist.Add(sql);
+            sqllist.Add(updatesql);
+            return db.Executs(sqllist);
+            //return db.ExecutByStringResult(sql);
         }
 
         public string UpdateInfo(Dictionary<string,object> d)

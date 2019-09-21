@@ -18,11 +18,7 @@ namespace WZGX.WebAPI.Controllers.jygl
     [Route("WorkFlow")]
     public class WorkFlowController : Controller
     {
-        // GET: /<controller>/
-        public IActionResult Index()
-        {
-            return View();
-        }
+        #region 测试调用流程API方法（无用）
         /// <summary>
         /// 获取流程步骤
         /// </summary>
@@ -68,7 +64,6 @@ namespace WZGX.WebAPI.Controllers.jygl
             }
             return Json(s);
         }
-
 
         [HttpPost("sendTask")]
         //public IActionResult sendTask([FromBody]JObject value)
@@ -116,7 +111,162 @@ namespace WZGX.WebAPI.Controllers.jygl
             }
             return Json(s);
         }
-        #region 发起流程
+        #endregion
+
+        #region 执行流程(未启用)
+
+        [HttpPost("executeFlow")]
+        public IActionResult executeFlow(string systemcode, string stepid, string flowid, string taskid, string instanceid, string senderid, string tasktitle, string comment, string type, bool isFreeSend)
+        {
+            Dictionary<string, object> r = new Dictionary<string, object>();
+            #region 获取流程步骤
+            if (systemcode == null || systemcode.Length == 0)
+            {
+                r["code"] = -1;
+                r["message"] = "参数systemcode为空";
+                return Json(r);
+            }
+            var flowRunModel = new RoadFlow.Business.Flow().GetFlowRunModel(new Guid(flowid));
+            if (null == flowRunModel)
+            {
+                r["code"] = -1;
+                r["message"] = "未找到流程运行时";
+                return Json(r);
+            }
+            if (!stepid.IsGuid(out Guid stepGuid))
+            {
+                stepGuid = flowRunModel.FirstStepId;
+            }
+            RoadFlow.Business.FlowTask flowTask = new RoadFlow.Business.FlowTask();
+            Guid groupId = Guid.Empty;
+            string instanceId = string.Empty;
+            bool isMobile = false;
+            if (taskid.IsGuid(out Guid taskGuid))
+            {
+                var task = flowTask.Get(taskGuid);
+                if (null != task)
+                {
+                    groupId = task.GroupId;
+                    instanceId = task.InstanceId;
+                }
+            }
+
+            var (html, message, sendSteps) = flowTask.GetNextSteps(flowRunModel, stepGuid, groupId, taskGuid, instanceId, senderid.ToGuid(), isFreeSend, isMobile);
+            JObject jObject = RoadFlow.Mvc.ApiTools.GetJObject();
+            JArray jArray = new JArray();
+            foreach (var step in sendSteps)
+            {
+                JObject jObject1 = new JObject
+                {
+                    { "id", step.Id },
+                    { "name", step.Name },
+                    { "users", step.RunDefaultMembers },
+                    { "note", step.Note }
+                };
+                jArray.Add(jObject1);
+            }
+            #endregion
+            #region 发送流程
+            JArray steps = jArray;
+            if (!flowid.IsGuid(out Guid flowGuid))
+            {
+                r["code"] = -1;
+                r["message"] = "参数flowid不是Guid";
+                return Json(r);
+
+            }
+            if (!senderid.IsGuid(out Guid senderGuid))
+            {
+                r["code"] = -1;
+                r["message"] = "参数senderid不是Guid";
+                return Json(r);
+            }
+            RoadFlow.Business.User user = new RoadFlow.Business.User();
+            RoadFlow.Business.Organize organize = new RoadFlow.Business.Organize();
+            var sender = user.Get(senderGuid);
+            if (null == sender)
+            {
+                r["code"] = -1;
+                r["message"] = "未找到发送人";
+                return Json(r);
+            }
+            //RoadFlow.Business.FlowTask flowTask = new RoadFlow.Business.FlowTask();
+            RoadFlow.Model.FlowTask currentTask = null;
+            if (taskid.IsGuid(out Guid taskGuid2))
+            {
+                currentTask = flowTask.Get(taskGuid2);
+            }
+
+            RoadFlow.Model.FlowRunModel.Execute executeModel = new RoadFlow.Model.FlowRunModel.Execute();
+            executeModel.Comment = comment;
+            executeModel.ExecuteType = flowTask.GetExecuteType(type);
+            executeModel.FlowId = flowGuid;
+            executeModel.InstanceId = instanceid;
+            executeModel.Sender = sender;
+            executeModel.Title = tasktitle;
+            if (null != currentTask)
+            {
+                executeModel.GroupId = currentTask.GroupId;
+                executeModel.StepId = currentTask.StepId;
+                executeModel.TaskId = currentTask.Id;
+                if (instanceId.IsNullOrWhiteSpace())
+                {
+                    instanceId = currentTask.InstanceId;
+                }
+                if (tasktitle.IsNullOrWhiteSpace())
+                {
+                    tasktitle = currentTask.Title;
+                }
+            }
+            else
+            {
+                var flowRunModel2 = new RoadFlow.Business.Flow().GetFlowRunModel(flowGuid);
+                if (null == flowRunModel2)
+                {
+                    r["code"] = -1;
+                    r["message"] = "未找到流程运行时";
+                    return Json(r);
+                }
+                executeModel.StepId = flowRunModel.FirstStepId;
+            }
+            if (null != steps)
+            {
+                List<(Guid, string, Guid?, int?, List<RoadFlow.Model.User>, DateTime?)> nextSteps = new List<(Guid, string, Guid?, int?, List<RoadFlow.Model.User>, DateTime?)>();
+                foreach (JObject step in steps)
+                {
+                    string id = step["id"].ToString();
+                    Guid stepId = id.ToGuid();
+                    //string stepName = step.Value<string>("name");
+                    //string beforeStepId = step.Value<string>("beforestepid");//原步骤ID(动态步骤的原步骤ID)
+                    //string parallelorserial = step.Value<string>("parallelorserial");//0并且 1串行
+                    //List<RoadFlow.Model.User> users = organize.GetAllUsers(step.Value<string>("users"));
+                    string stepName = step["name"].ToString();
+                    string beforeStepId = step["beforestepid"] == null ? null : step["beforestepid"].ToString();//原步骤ID(动态步骤的原步骤ID)
+                    string parallelorserial = step["parallelorserial"] == null ? null : step["parallelorserial"].ToString();//0并且 1串行
+                    List<RoadFlow.Model.User> users = organize.GetAllUsers(step["users"].ToString());
+                    string datetTime = step.Value<string>("completedtime");
+                    nextSteps.Add((stepId, stepName,
+                        beforeStepId.IsGuid(out Guid beforeStepGuid) ? new Guid?(beforeStepGuid) : new Guid?(),
+                                            parallelorserial.IsInt(out int parallelorserialInt) ? new int?(parallelorserialInt) : new int?(),
+                                            users, datetTime.IsDateTime(out DateTime dateTime) ? dateTime : new DateTime?()));
+                }
+                executeModel.Steps = nextSteps;
+            }
+            RoadFlow.Model.FlowRunModel.ExecuteResult executeResult = flowTask.Execute(executeModel);
+            int errCode = executeResult.IsSuccess ? 0 : 2001;
+            string errMsg = executeResult.Messages;
+            r["code"] = errCode;
+            r["message"] = errMsg;
+            r["data"] = JObject.FromObject(executeResult);
+
+            return Json(r);
+            #endregion
+        }
+
+
+        #endregion
+
+        #region 发起/执行流程
         /// <summary>
         /// 发起流程
         /// </summary>
@@ -361,159 +511,6 @@ namespace WZGX.WebAPI.Controllers.jygl
         }
         #endregion
 
-        #region 执行流程
-
-        [HttpPost("executeFlow")]
-        public IActionResult executeFlow(string systemcode, string stepid, string flowid, string taskid, string instanceid, string senderid, string tasktitle, string comment, string type, bool isFreeSend)
-        {
-            Dictionary<string, object> r = new Dictionary<string, object>();
-            #region 获取流程步骤
-            if (systemcode == null || systemcode.Length == 0)
-            {
-                r["code"] = -1;
-                r["message"] = "参数systemcode为空";
-                return Json(r);
-            }
-            var flowRunModel = new RoadFlow.Business.Flow().GetFlowRunModel(new Guid(flowid));
-            if (null == flowRunModel)
-            {
-                r["code"] = -1;
-                r["message"] = "未找到流程运行时";
-                return Json(r);
-            }
-            if (!stepid.IsGuid(out Guid stepGuid))
-            {
-                stepGuid = flowRunModel.FirstStepId;
-            }
-            RoadFlow.Business.FlowTask flowTask = new RoadFlow.Business.FlowTask();
-            Guid groupId = Guid.Empty;
-            string instanceId = string.Empty;
-            bool isMobile = false;
-            if (taskid.IsGuid(out Guid taskGuid))
-            {
-                var task = flowTask.Get(taskGuid);
-                if (null != task)
-                {
-                    groupId = task.GroupId;
-                    instanceId = task.InstanceId;
-                }
-            }
-
-            var (html, message, sendSteps) = flowTask.GetNextSteps(flowRunModel, stepGuid, groupId, taskGuid, instanceId, senderid.ToGuid(), isFreeSend, isMobile);
-            JObject jObject = RoadFlow.Mvc.ApiTools.GetJObject();
-            JArray jArray = new JArray();
-            foreach (var step in sendSteps)
-            {
-                JObject jObject1 = new JObject
-                {
-                    { "id", step.Id },
-                    { "name", step.Name },
-                    { "users", step.RunDefaultMembers },
-                    { "note", step.Note }
-                };
-                jArray.Add(jObject1);
-            }
-            #endregion
-            #region 发送流程
-            JArray steps = jArray;
-            if (!flowid.IsGuid(out Guid flowGuid))
-            {
-                r["code"] = -1;
-                r["message"] = "参数flowid不是Guid";
-                return Json(r);
-
-            }
-            if (!senderid.IsGuid(out Guid senderGuid))
-            {
-                r["code"] = -1;
-                r["message"] = "参数senderid不是Guid";
-                return Json(r);
-            }
-            RoadFlow.Business.User user = new RoadFlow.Business.User();
-            RoadFlow.Business.Organize organize = new RoadFlow.Business.Organize();
-            var sender = user.Get(senderGuid);
-            if (null == sender)
-            {
-                r["code"] = -1;
-                r["message"] = "未找到发送人";
-                return Json(r);
-            }
-            //RoadFlow.Business.FlowTask flowTask = new RoadFlow.Business.FlowTask();
-            RoadFlow.Model.FlowTask currentTask = null;
-            if (taskid.IsGuid(out Guid taskGuid2))
-            {
-                currentTask = flowTask.Get(taskGuid2);
-            }
-
-            RoadFlow.Model.FlowRunModel.Execute executeModel = new RoadFlow.Model.FlowRunModel.Execute();
-            executeModel.Comment = comment;
-            executeModel.ExecuteType = flowTask.GetExecuteType(type);
-            executeModel.FlowId = flowGuid;
-            executeModel.InstanceId = instanceid;
-            executeModel.Sender = sender;
-            executeModel.Title = tasktitle;
-            if (null != currentTask)
-            {
-                executeModel.GroupId = currentTask.GroupId;
-                executeModel.StepId = currentTask.StepId;
-                executeModel.TaskId = currentTask.Id;
-                if (instanceId.IsNullOrWhiteSpace())
-                {
-                    instanceId = currentTask.InstanceId;
-                }
-                if (tasktitle.IsNullOrWhiteSpace())
-                {
-                    tasktitle = currentTask.Title;
-                }
-            }
-            else
-            {
-                var flowRunModel2 = new RoadFlow.Business.Flow().GetFlowRunModel(flowGuid);
-                if (null == flowRunModel2)
-                {
-                    r["code"] = -1;
-                    r["message"] = "未找到流程运行时";
-                    return Json(r);
-                }
-                executeModel.StepId = flowRunModel.FirstStepId;
-            }
-            if (null != steps)
-            {
-                List<(Guid, string, Guid?, int?, List<RoadFlow.Model.User>, DateTime?)> nextSteps = new List<(Guid, string, Guid?, int?, List<RoadFlow.Model.User>, DateTime?)>();
-                foreach (JObject step in steps)
-                {
-                    string id = step["id"].ToString();
-                    Guid stepId = id.ToGuid();
-                    //string stepName = step.Value<string>("name");
-                    //string beforeStepId = step.Value<string>("beforestepid");//原步骤ID(动态步骤的原步骤ID)
-                    //string parallelorserial = step.Value<string>("parallelorserial");//0并且 1串行
-                    //List<RoadFlow.Model.User> users = organize.GetAllUsers(step.Value<string>("users"));
-                    string stepName = step["name"].ToString();
-                    string beforeStepId = step["beforestepid"] == null ? null : step["beforestepid"].ToString();//原步骤ID(动态步骤的原步骤ID)
-                    string parallelorserial = step["parallelorserial"] == null ? null : step["parallelorserial"].ToString();//0并且 1串行
-                    List<RoadFlow.Model.User> users = organize.GetAllUsers(step["users"].ToString());
-                    string datetTime = step.Value<string>("completedtime");
-                    nextSteps.Add((stepId, stepName,
-                        beforeStepId.IsGuid(out Guid beforeStepGuid) ? new Guid?(beforeStepGuid) : new Guid?(),
-                                            parallelorserial.IsInt(out int parallelorserialInt) ? new int?(parallelorserialInt) : new int?(),
-                                            users, datetTime.IsDateTime(out DateTime dateTime) ? dateTime : new DateTime?()));
-                }
-                executeModel.Steps = nextSteps;
-            }
-            RoadFlow.Model.FlowRunModel.ExecuteResult executeResult = flowTask.Execute(executeModel);
-            int errCode = executeResult.IsSuccess ? 0 : 2001;
-            string errMsg = executeResult.Messages;
-            r["code"] = errCode;
-            r["message"] = errMsg;
-            r["data"] = JObject.FromObject(executeResult);
-
-            return Json(r);
-            #endregion
-        }
-
-
-        #endregion
-
         #region 回退流程
 
         [HttpPost("backFlow")]
@@ -695,7 +692,6 @@ namespace WZGX.WebAPI.Controllers.jygl
 
         #endregion
 
-
         #region 撤销流程
         //后期可以考虑递归撤回
         //public string getTaskId(DataTable dt,string taskid)
@@ -770,9 +766,7 @@ namespace WZGX.WebAPI.Controllers.jygl
         }
         #endregion
 
-        #region 查看流程
-
-
+        #region 查看流程（根据表单主键查询流程groupId）
         [HttpPost("flowProcess")]
         public IActionResult flowProcess(string instanceid)
         {
@@ -811,5 +805,6 @@ namespace WZGX.WebAPI.Controllers.jygl
             return Json(r);
         }
         #endregion
+
     }
 }

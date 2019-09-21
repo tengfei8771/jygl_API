@@ -12,7 +12,7 @@ namespace UIDP.ODS.jyglDB
 
         public DataTable GetInfo(string XMBH,string XMMC,string userid,int type)
         {
-            string sql = " SELECT a.*,b.Name as PC ,c.Name as LB FROM jy_cbjh a left join tax_dictionary b on a.XMPC=b.Code left join tax_dictionary c on c.Code=a.XMLB WHERE a.IS_DELETE=0";
+            string sql = " SELECT a.*,b.Name as PC ,c.Name as LB,d.ORG_NAME CBDWMC FROM jy_cbjh a left join tax_dictionary b on a.XMPC=b.Code left join tax_dictionary c on c.Code=a.XMLB left join ts_uidp_org d on a.CBDW=d.ORG_CODE WHERE a.IS_DELETE=0 ";
             if (!string.IsNullOrEmpty(XMBH))
             {
                 sql += " AND a.XMCODE LIKE'" + XMBH + "%'";
@@ -33,12 +33,13 @@ namespace UIDP.ODS.jyglDB
         public string CreateInfo(Dictionary<string,object> d,List<Dictionary<string,object>> list,string XMBH)
         {
             List<string> sqllist = new List<string>();
-            string sql = "INSERT INTO jy_cbjh (XMBH,XMMC,CBDW,JSNR,JHZJE,LSJE,BNJE,WLJE,XMPC,CJR,CJSJ,IS_DELETE,CZWZ,XMLB,HASINCOME,XMCODE,JHND,PROCESS_STATE)values(";
+            string sql = "INSERT INTO jy_cbjh (XMBH,XMMC,CBDW,JSNR,JHZJE,TZHJHZJE,LSJE,BNJE,WLJE,XMPC,CJR,CJSJ,IS_DELETE,CZWZ,WZJHJE,XMLB,HASINCOME,XMCODE,JHND,PROCESS_STATE)values(";
             sql += GetSQLStr(XMBH);
             sql += GetSQLStr(d["XMMC"]);
             sql += GetSQLStr(d["CBDW"]);
             sql += GetSQLStr(d["JSNR"]);
             sql += GetSQLStr(d["JHZJE"],1);
+            sql += GetSQLStr(d["JHZJE"], 1);
             sql += GetSQLStr(d["LSJE"], 1);
             sql += GetSQLStr(d["BNJE"], 1);
             sql += GetSQLStr(d["WLJE"], 1);
@@ -47,6 +48,7 @@ namespace UIDP.ODS.jyglDB
             sql += GetSQLStr(DateTime.Now);
             sql += GetSQLStr(0,1);
             sql += GetSQLStr(d["CZWZ"],1);
+            sql += GetSQLStr(d["WZJHJE"], 1);
             //sql += GetSQLStr(d["SFCW"], 1);
             sql += GetSQLStr(d["XMLB"]);
             sql += GetSQLStr(d["HASINCOME"],1);
@@ -95,6 +97,7 @@ namespace UIDP.ODS.jyglDB
             sql += "CJSJ=" + GetSQLStr(d["CJSJ"]);
             sql += "IS_DELETE=" + GetSQLStr(d["IS_DELETE"],1);
             sql += "CZWZ=" + GetSQLStr(d["CZWZ"],1);
+            sql += "WZJHJE=" + GetSQLStr(d["WZJHJE"], 1);
             sql += "SFCW=" + GetSQLStr(d["SFCW"],1);
             sql += " XMLB=" + GetSQLStr(d["XMLB"]);
             sql += "HASINCOME=" + GetSQLStr(d["HASINCOME"], 1);
