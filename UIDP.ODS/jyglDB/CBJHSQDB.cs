@@ -29,6 +29,30 @@ namespace UIDP.ODS.jyglDB
             ///待添加功能，只有流程审批完成后才能选择项目，sql+=" PROCESS_STATE=2"
             return db.GetDataTable(sql);
         }
+        public DataTable GetYBInfo(string XMBH, string XMMC, string userid)
+        {
+            //string sql = " SELECT a.*,b.Name as PC FROM jy_cbjh a left join tax_dictionary b on a.XMPC=b.Code WHERE a.IS_DELETE=0";
+            string sql = @" SELECT a.*,d.ORG_NAME CBDWMC,b.Name as PC,c.Id,c.FlowId,c.FlowName,c.StepId,c.StepName,c.GroupId,c.InstanceId,c.Title,c.SenderId,c.SenderName,c.ReceiveTime,c.CompletedTime,c.CompletedTime1,c.Status,c.ExecuteType,c.Note 
+FROM jy_cbjh a left join tax_dictionary b on a.XMPC=b.Code 
+left join RF_FlowTask c on a.XMBH=c.InstanceId and LEFT(a.XMBH,2)='CB'
+left join ts_uidp_org d on a.CBDW=d.ORG_CODE
+WHERE a.IS_DELETE=0 and c.ExecuteType>1 ";
+            if (!string.IsNullOrEmpty(userid))
+            {
+                sql += " AND c.ReceiveId ='" + userid.ToUpper() + "'";
+            }
+            if (!string.IsNullOrEmpty(XMBH))
+            {
+                sql += " AND a.XMBH LIKE'" + XMBH + "%'";
+            }
+            if (!string.IsNullOrEmpty(XMMC))
+            {
+                sql += " AND a.XMMC='" + XMMC + "'";
+            }
+
+            //sql += " LIMIT " + (page - 1) * limit + "," + limit;
+            return db.GetDataTable(sql);
+        }
 
         public string CreateInfo(Dictionary<string,object> d,List<Dictionary<string,object>> list,string XMBH)
         {

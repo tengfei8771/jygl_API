@@ -13,9 +13,10 @@ namespace UIDP.ODS.jyglDB
         public DataTable GetInfo(string XMBH, string XMMC,string userid)
         {
             //string sql = " SELECT a.*,b.Name as PC FROM jy_cbjh a left join tax_dictionary b on a.XMPC=b.Code WHERE a.IS_DELETE=0";
-            string sql = @"SELECT a.*,b.Name as PC,c.Id,c.FlowId,c.FlowName,c.StepId,c.StepName,c.InstanceId,c.GroupId,c.TaskType,c.Title,c.SenderId,c.SenderName,c.ReceiveTime,c.CompletedTime,c.Status,c.Note 
+            string sql = @"SELECT a.*,d.ORG_NAME CBDWMC,b.Name as PC,c.Id,c.FlowId,c.FlowName,c.StepId,c.StepName,c.InstanceId,c.GroupId,c.TaskType,c.Title,c.SenderId,c.SenderName,c.ReceiveTime,c.CompletedTime,c.Status,c.Note 
 FROM jy_cbjh a left join tax_dictionary b on a.XMPC=b.Code 
-left join RF_FlowTask c on a.XMBH=c.InstanceId and LEFT(a.XMBH,2)='CB'
+left join RF_FlowTask c on a.XMBH=c.InstanceId and LEFT(a.XMBH,2)='CB' 
+left join ts_uidp_org d on a.CBDW=d.ORG_CODE 
 WHERE a.IS_DELETE=0 and c.Status IN(0,1) ";
             if (!string.IsNullOrEmpty(userid))
             {

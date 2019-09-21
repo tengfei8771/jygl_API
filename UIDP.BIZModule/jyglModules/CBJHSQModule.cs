@@ -41,8 +41,34 @@ namespace UIDP.BIZModule.jyglModules
             }
             return r;
         }
-
-
+        public Dictionary<string, object> GetYBInfo(string XMBH, string XMMC, int page, int limit, string userid)
+        {
+            Dictionary<string, object> r = new Dictionary<string, object>();
+            try
+            {
+                DataTable dt = db.GetYBInfo(XMBH, XMMC, userid);
+                if (dt.Rows.Count > 0)
+                {
+                    r["code"] = 2000;
+                    r["message"] = "操作成功！";
+                    r["items"] = KVTool.GetPagedTable(dt, page, limit);
+                    r["total"] = dt.Rows.Count;
+                }
+                else
+                {
+                    r["code"] = 2000;
+                    r["message"] = "暂无数据！";
+                    r["total"] = dt.Rows.Count;
+                }
+            }
+            catch (Exception e)
+            {
+                r["code"] = -1;
+                r["message"] = e.Message;
+            }
+            return r;
+        }
+        
         public Dictionary<string,object> CreateInfo(List<Dictionary<string,object>> list)
         {
             Dictionary<string, object> r = new Dictionary<string, object>();
