@@ -302,7 +302,7 @@ namespace WZGX.WebAPI.Controllers.jygl
                         r["message"] = "失败！";
                     }
                 }
-                else if(formtype == 1)
+                else if (formtype == 1)
                 {
                     string sql = "UPDATE jy_fybx set PROCESS_STATE={0} where BXDH='" + instanceid + "'";
                     int status = 0;
@@ -670,15 +670,7 @@ namespace WZGX.WebAPI.Controllers.jygl
                 else
                 {
                     string sql = "UPDATE jy_fybx set PROCESS_STATE={0} where BXDH='" + instanceid + "'";
-                    int status = 0;
-                    if (steps != null)
-                    {
-                        status = 1;
-                    }
-                    else
-                    {
-                        status = 2;
-                    }
+                    int status = 3;
                     sql = string.Format(sql, status);
                     if (db.ExecutByStringResult(sql) == "")
                     {
@@ -741,7 +733,8 @@ namespace WZGX.WebAPI.Controllers.jygl
                 if (!string.IsNullOrEmpty(flag))
                 {
                     string updateSql = string.Empty;
-                    string revokeSql = "delete from  RF_FlowTask where InstanceId = '" + instanceid + "' and (previd ='" + taskid + "' or id='" + taskid + "')";
+                    //string revokeSql = "delete from  RF_FlowTask where InstanceId = '" + instanceid + "' and (previd ='" + taskid + "' or id='" + taskid + "')";
+                    string revokeSql = "delete from  RF_FlowTask where InstanceId = '" + instanceid + "'";//测试版撤回
                     if (formtype == 0)
                     {
                         updateSql = "UPDATE jy_cbjh set PROCESS_STATE=0 where XMBH='" + instanceid + "'";
@@ -771,6 +764,48 @@ namespace WZGX.WebAPI.Controllers.jygl
             {
                 r["code"] = -1;
                 r["message"] = "撤销失败！参数异常！";
+            }
+
+            return Json(r);
+        }
+        #endregion
+
+        #region 查看流程
+
+
+        [HttpPost("flowProcess")]
+        public IActionResult flowProcess(string instanceid)
+        {
+            Dictionary<string, object> r = new Dictionary<string, object>();
+
+            if (!string.IsNullOrEmpty(instanceid))
+            {
+                DBTool db = new DBTool("");
+                JObject jObject = null;
+                DataTable flowTask = db.GetDataTable("select  top 1 FlowId,GroupId from RF_FlowTask where InstanceId='" + instanceid + "' and Status in(0,1) order by ReceiveTime desc");//判断是否可以撤回
+                if (flowTask != null && flowTask.Rows.Count == 1)
+                {
+                     jObject = new JObject
+                     {
+                        { "flowId",  flowTask.Rows[0]["FlowId"].ToString() },
+                        { "groupId", flowTask.Rows[0]["GroupId"].ToString() }
+                    };
+                   
+                        r["code"] = 2000;
+                        r["message"] = "成功！";
+                        r["data"] = JObject.FromObject(jObject);
+                }
+                else
+                {
+                    r["code"] = -1;
+                    r["message"] = "未找到当前流程！";
+                }
+
+            }
+            else
+            {
+                r["code"] = -1;
+                r["message"] = "参数异常！";
             }
 
             return Json(r);
