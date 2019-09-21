@@ -12,7 +12,7 @@ namespace UIDP.ODS.jyglDB
 
         public DataTable GetInfo(string XMBH, string XMMC)
         {
-            string sql = " SELECT a.*,b.Name as PC FROM jy_cbjh a left join tax_dictionary b on a.XMPC=b.Code WHERE a.IS_DELETE=0 AND a.SFCW=1";
+            string sql = " SELECT a.*,b.Name as PC,c.Name as LB,d.ORG_NAME CBDWMC FROM jy_cbjh a left join tax_dictionary b on a.XMPC=b.Code left join tax_dictionary c on c.Code=a.XMLB left join ts_uidp_org d on a.CBDW=d.ORG_CODE WHERE a.IS_DELETE=0 AND a.SFCW=1";
             if (!string.IsNullOrEmpty(XMBH))
             {
                 sql += " AND a.XMBH LIKE'" + XMBH + "%'";
