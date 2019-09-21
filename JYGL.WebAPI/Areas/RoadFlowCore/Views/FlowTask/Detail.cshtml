@@ -2,8 +2,8 @@
     <a href="javascript:void(0);" onclick="window.location='Detail?displaymodel=1'+'&@Html.Raw(ViewData["query"])';return false;"><i class="fa fa-image"></i><label>图形方式</label></a>
     <span class="toolbarsplit">&nbsp;</span>
     <a href="javascript:void(0);" onclick="window.location='Detail?displaymodel=0'+'&@Html.Raw(ViewData["query"])';return false;"><i class="fa fa-reorder"></i><label>列表方式</label></a>
-    <span class="toolbarsplit">&nbsp;</span>
-    <a href="javascript:void(0);" onclick="new RoadUI.Window().close();"><i class="fa fa-times"></i><label>关闭窗口</label></a>
+    @*<span class="toolbarsplit">&nbsp;</span>
+    <a href="javascript:void(0);" onclick="new RoadUI.Window().close();"><i class="fa fa-times"></i><label>关闭窗口</label></a>*@
 </div>
 @if ("0".Equals(ViewData["displaymodel"].ToString()))
 {

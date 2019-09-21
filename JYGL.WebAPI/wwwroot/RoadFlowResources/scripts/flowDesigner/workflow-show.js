@@ -87,7 +87,7 @@ function addStep(x, y, text, id, isIn, stepColor, stepShape, title, imgSrc) {
             $tooltip = $('<div id="' + divId + '" style="height:200px;overflow:auto;">' + this.showinfo + '</div>');
             $("body").append($tooltip);
             if ($('#stepinfo_' + id).size() == 0) {
-                top.mainDialog.open({
+                new RoadUI.Window().open({
                     elementid: divId, id: 'stepinfo_' + id, left: left, top: top1, opener: window,
                     ismodal: false, showtitle: false, settopwindow: false,
                     width: dialogWidth, height: dialogHeight,
@@ -127,7 +127,7 @@ function closeTooltip(id, x, y) {
     var d_width = 480;
     var d_height = 204;
     if (wx < d_left || wy < d_top || wx > (d_left + d_width) || wy > (d_top + d_height)) {
-        top.mainDialog.close(id);
+        new RoadUI.Window().close(id);
     }
 }
 

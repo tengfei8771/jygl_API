@@ -782,7 +782,7 @@ namespace WZGX.WebAPI.Controllers.jygl
             {
                 DBTool db = new DBTool("");
                 JObject jObject = null;
-                DataTable flowTask = db.GetDataTable("select  top 1 FlowId,GroupId from RF_FlowTask where InstanceId='" + instanceid + "' and Status in(0,1) order by ReceiveTime desc");//判断是否可以撤回
+                DataTable flowTask = db.GetDataTable("select  top 1 FlowId,GroupId from RF_FlowTask where InstanceId='" + instanceid + "'  order by ReceiveTime desc");//判断是否可以撤回
                 if (flowTask != null && flowTask.Rows.Count == 1)
                 {
                      jObject = new JObject
