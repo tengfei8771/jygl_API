@@ -323,15 +323,35 @@
         return ele;
     };
 
+    //var addIframe = function (win) {
+    //    iframesArray.push(win);
+    //    addIframe1(win);
+    //    try {
+    //        if (win.parent.document) {
+    //            addIframe(win.parent);
+    //        }
+    //    } catch (e) { }
+
+    //};
+
+    //var addIframe1 = function (win) {
+    //    var iframes = $(win.document).find("iframe");
+    //    for (var i = 0; i < iframes.size(); i++) {
+    //        try {
+    //            iframesArray.push(iframes.eq(i).get(0).contentWindow);
+    //            addIframe1(iframes.eq(i).get(0).contentWindow);
+    //        } catch (e) { }
+    //    }
+    //};
     var addIframe = function (win) {
         iframesArray.push(win);
         addIframe1(win);
+        var path = getLocalhostPath(win);
         try {
-            if (win.parent.document) {
+            if (win.parent != undefined && getLocalhostPath(win.parent) == path) {
                 addIframe(win.parent);
             }
         } catch (e) { }
-
     };
 
     var addIframe1 = function (win) {
@@ -344,6 +364,13 @@
         }
     };
 
+    var getLocalhostPath = function (win) {
+        var curWwwPath = win.document.location.href;
+        var pathname = win.document.location.pathname;
+        var pos = curWwwPath.indexOf(pathname);
+        var localhostPath = curWwwPath.substring(0, pos).replace("http://", "").replace("https://", "");
+        return localhostPath;
+    };
     this.reloadOpener = function (url, id, type) //type为webapi刷新函数 不为空表示webapi刷新
     {
         if (!id || id.trim().length == 0) {
