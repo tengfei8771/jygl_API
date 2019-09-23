@@ -514,7 +514,7 @@ namespace WZGX.WebAPI.Controllers.jygl
         #region 回退流程
 
         [HttpPost("backFlow")]
-        public IActionResult backFlow(string systemcode, string flowid, string taskid, string instanceid, string senderid, string tasktitle, string comment, int formtype)
+        public IActionResult backFlow(string systemcode, string flowid,string groupid, string taskid, string instanceid, string senderid, string tasktitle, string comment, int formtype)
         {
             Dictionary<string, object> r = new Dictionary<string, object>();
             DataTable firsttesp = new DataTable();
@@ -523,7 +523,7 @@ namespace WZGX.WebAPI.Controllers.jygl
             #region 获取流程第一步步骤
             using (RoadFlow.Mapper.DataContext context = new RoadFlow.Mapper.DataContext())
             {
-                firsttesp = context.GetDataTable("select top 1 * from RF_FlowTask where InstanceId = '" + instanceid + "' ORDER BY ReceiveTime ");
+                firsttesp = context.GetDataTable("select top 1 * from RF_FlowTask where groupId='"+ groupid + "' InstanceId = '" + instanceid + "' ORDER BY ReceiveTime desc");
             }
             //if (firsttesp!=null&& firsttesp.Rows.Count==1)
             //{
@@ -664,9 +664,25 @@ namespace WZGX.WebAPI.Controllers.jygl
                         r["message"] = "失败！";
                     }
                 }
-                else
+                else if (formtype == 1)
                 {
                     string sql = "UPDATE jy_fybx set PROCESS_STATE={0} where BXDH='" + instanceid + "'";
+                    int status = 3;
+                    sql = string.Format(sql, status);
+                    if (db.ExecutByStringResult(sql) == "")
+                    {
+                        r["code"] = 2000;
+                        r["message"] = "审批已退回！";
+                    }
+                    else
+                    {
+                        r["code"] = -1;
+                        r["message"] = "失败！";
+                    }
+                }
+                else if (formtype == 2)
+                {
+                    string sql = "UPDATE jy_clbx set PROCESS_STATE={0} where CLBH='" + instanceid + "'";
                     int status = 3;
                     sql = string.Format(sql, status);
                     if (db.ExecutByStringResult(sql) == "")
@@ -726,11 +742,12 @@ namespace WZGX.WebAPI.Controllers.jygl
             {
                 DBTool db = new DBTool("");
                 string flag = db.GetString("select  count(1) from RF_FlowTask where previd = '" + taskid + "' and Status in(0,1) ");//判断是否可以撤回
-                if (!string.IsNullOrEmpty(flag))
+                if (!string.IsNullOrEmpty(flag)&&flag=="1")//只允许发起人撤回下一步未审批的流程
+                //if (!string.IsNullOrEmpty(flag))//发起人可撤回任意状态的流程
                 {
                     string updateSql = string.Empty;
-                    //string revokeSql = "delete from  RF_FlowTask where InstanceId = '" + instanceid + "' and (previd ='" + taskid + "' or id='" + taskid + "')";
-                    string revokeSql = "delete from  RF_FlowTask where InstanceId = '" + instanceid + "'";//测试版撤回
+                    string revokeSql = "delete from  RF_FlowTask where InstanceId = '" + instanceid + "' and (previd ='" + taskid + "' or id='" + taskid + "')";//只允许发起人撤回下一步未审批的流程
+                    //string revokeSql = "delete from  RF_FlowTask where InstanceId = '" + instanceid + "'";//发起人可撤回任意状态的流程
                     if (formtype == 0)
                     {
                         updateSql = "UPDATE jy_cbjh set PROCESS_STATE=0 where XMBH='" + instanceid + "'";
@@ -779,15 +796,15 @@ namespace WZGX.WebAPI.Controllers.jygl
                 DataTable flowTask = db.GetDataTable("select  top 1 FlowId,GroupId from RF_FlowTask where InstanceId='" + instanceid + "'  order by ReceiveTime desc");//判断是否可以撤回
                 if (flowTask != null && flowTask.Rows.Count == 1)
                 {
-                     jObject = new JObject
+                    jObject = new JObject
                      {
                         { "flowId",  flowTask.Rows[0]["FlowId"].ToString() },
                         { "groupId", flowTask.Rows[0]["GroupId"].ToString() }
                     };
-                   
-                        r["code"] = 2000;
-                        r["message"] = "成功！";
-                        r["data"] = JObject.FromObject(jObject);
+
+                    r["code"] = 2000;
+                    r["message"] = "成功！";
+                    r["data"] = JObject.FromObject(jObject);
                 }
                 else
                 {
