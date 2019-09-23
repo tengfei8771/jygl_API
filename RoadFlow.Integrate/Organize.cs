@@ -149,7 +149,7 @@ namespace RoadFlow.Integrate
                     {
                         foreach (DataRow drUserOrg in lstUserOrg)
                         {
-                            sb.Append(drUserOrg["ORG_ID"].ToString() + ",u_" + drUserOrg["USER_ID"].ToString() + ",");
+                            sb.Append(objWorkGroup.Id.ToString() + ",u_" + drUserOrg["USER_ID"].ToString() + ",");
                         }
                         string str = sb.ToString();
                         str = str.Substring(0, str.Length - 1);

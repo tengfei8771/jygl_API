@@ -60,7 +60,8 @@ else
     <script type="text/javascript">
         $(window).load(function () {
             openFlow1('@ViewData["flowid"]', '@ViewData["stepid"]', '@ViewData["groupid"]');
-            $(window.document.body).niceScroll({ cursorcolor: "#ACACAC", autohidemode: "leave" });
+            //$(window.document.body).niceScroll({ cursorcolor: "#ACACAC", autohidemode: "leave" });
+            $(window.document.body).attr('style', 'overflow:hidden');
         });
     </script>
 }
