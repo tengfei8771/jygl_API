@@ -523,7 +523,7 @@ namespace WZGX.WebAPI.Controllers.jygl
             #region 获取流程第一步步骤
             using (RoadFlow.Mapper.DataContext context = new RoadFlow.Mapper.DataContext())
             {
-                firsttesp = context.GetDataTable("select top 1 * from RF_FlowTask where groupId='"+ groupid + "' InstanceId = '" + instanceid + "' ORDER BY ReceiveTime desc");
+                firsttesp = context.GetDataTable("select top 1 * from RF_FlowTask where groupId='"+ groupid + "' and InstanceId = '" + instanceid + "' ORDER BY ReceiveTime desc");
             }
             //if (firsttesp!=null&& firsttesp.Rows.Count==1)
             //{
