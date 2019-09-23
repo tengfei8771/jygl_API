@@ -121,7 +121,8 @@ namespace UIDP.ODS.jyglDB
         /// <returns></returns>
         public DataTable GetFYSPInfo(string BXDH, string FYXM, string userid)
         {
-            string sql = @"SELECT a.*,c.Id,c.FlowId,c.FlowName,c.StepId,c.StepName,c.InstanceId,c.GroupId,c.TaskType,c.Title,c.SenderId,c.SenderName,c.ReceiveTime,c.CompletedTime,c.Status,c.Note,d.TZHJHZJE 
+            string sql = @"SELECT a.*,c.Id,c.FlowId,c.FlowName,c.StepId,c.StepName,c.InstanceId,c.GroupId,c.TaskType,c.Title,c.SenderId,c.SenderName,c.ReceiveTime,c.CompletedTime,c.Status,c.Note,
+                          d.TZHJHZJE,d.YBXJE
                         FROM jy_fybx a 
                          join RF_FlowTask c on a.BXDH=c.InstanceId and LEFT(a.BXDH,2)='FY'
                         join jy_cbjh d on d.XMBH=a.XMBH
