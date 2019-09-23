@@ -77,6 +77,10 @@ namespace UIDP.BIZModule.jyglModules
                 string XMBH = CreateXMBH();
                 Dictionary<string, object> d = list[list.Count - 1];
                 list.RemoveAt(list.Count - 1);
+                if (!d.Keys.Contains("WZJHJE") || d["WZJHJE"] == null || d["WZJHJE"].ToString() == "")
+                {
+                    d["WZJHJE"] = "0";
+                }
                 string b = db.CreateInfo(d,list,XMBH);
                 if (b == "")
                 {
