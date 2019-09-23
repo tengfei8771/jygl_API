@@ -370,6 +370,64 @@ namespace UIDP.BIZModule.jyglModules
             }
             return r;
         }
+        public Dictionary<string, object> GetSPInfo(string CLBH, int page, int limit, string userid)
+        {
+            Dictionary<string, object> r = new Dictionary<string, object>();
+            try
+            {
+                DataTable dt = db.GetSPInfo(CLBH, userid);
+                if (dt.Rows.Count > 0)
+                {
+                    r["code"] = 2000;
+                    r["message"] = "成功";
+                    r["items"] = KVTool.GetPagedTable(dt, page, limit);
+                    r["total"] = dt.Rows.Count;
+
+                }
+                else
+                {
+                    r["code"] = 2000;
+                    r["message"] = "成功";
+                    r["total"] = dt.Rows.Count;
+                }
+            }
+            catch (Exception e)
+            {
+                r["code"] = -1;
+                r["message"] = e.Message;
+            }
+            return r;
+        }
+
+        public Dictionary<string, object> GetSPXCInfo(string CLBH)
+        {
+            Dictionary<string, object> r = new Dictionary<string, object>();
+            try
+            {
+                DataTable dt = db.GetSPXCInfo(CLBH);
+                if (dt.Rows.Count > 0)
+                {
+                    r["code"] = 2000;
+                    r["message"] = "成功";
+                    r["items"] = dt;
+                    r["total"] = dt.Rows.Count;
+
+                }
+                else
+                {
+                    r["code"] = 2000;
+                    r["message"] = "成功";
+                    r["total"] = dt.Rows.Count;
+                }
+            }
+            catch (Exception e)
+            {
+                r["code"] = -1;
+                r["message"] = e.Message;
+            }
+            return r;
+        }
+
 
         public string CreateXMBH()
         {
