@@ -432,7 +432,7 @@ namespace WZGX.WebAPI.Controllers.jygl
                 {
                     string sql = "UPDATE jy_cbjh set PROCESS_STATE={0} where XMBH='" + instanceid + "'";
                     int status = 0;
-                    if (steps != null)
+                    if (steps.Count!=0)
                     {
                         status = 1;
                     }
@@ -456,7 +456,7 @@ namespace WZGX.WebAPI.Controllers.jygl
                 {
                     string sql = "UPDATE jy_fybx set PROCESS_STATE={0} where BXDH='" + instanceid + "'";
                     int status = 0;
-                    if (steps != null)
+                    if (steps.Count!= 0)
                     {
                         status = 1;
                     }
@@ -480,7 +480,7 @@ namespace WZGX.WebAPI.Controllers.jygl
                 {
                     string sql = "UPDATE jy_clbx set PROCESS_STATE={0} where CLBH='" + instanceid + "'";
                     int status = 0;
-                    if (steps != null)
+                    if (steps.Count!= 0)
                     {
                         status = 1;
                     }
