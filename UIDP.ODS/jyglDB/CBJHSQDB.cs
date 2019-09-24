@@ -204,7 +204,7 @@ WHERE a.IS_DELETE=0 and c.ExecuteType>1 ";
 
         public string UpdateDesCBJHJE(string id, decimal BXJE)
         {
-            string sql = "UPDATE jy_cbjh set YBXJE=CASE WHEN YBXJE IS NULL THEN " + BXJE + " ELSE YBXJE-" + BXJE + " END WHERE XMBH='" + id + "'";
+            string sql = "UPDATE jy_cbjh set YBXJE=CASE WHEN YBXJE IS NULL THEN 0-" + BXJE + " ELSE YBXJE-" + BXJE + " END WHERE XMBH='" + id + "'";
             return db.ExecutByStringResult(sql);
         }
 

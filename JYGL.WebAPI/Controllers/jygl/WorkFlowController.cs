@@ -742,7 +742,7 @@ namespace WZGX.WebAPI.Controllers.jygl
             {
                 DBTool db = new DBTool("");
                 string flag = db.GetString("select  count(1) from RF_FlowTask where previd = '" + taskid + "' and Status in(0,1) ");//判断是否可以撤回
-                if (!string.IsNullOrEmpty(flag)&&flag=="1")//只允许发起人撤回下一步未审批的流程
+                if (!string.IsNullOrEmpty(flag)&&flag!="0")//只允许发起人撤回下一步未审批的流程
                 //if (!string.IsNullOrEmpty(flag))//发起人可撤回任意状态的流程
                 {
                     string updateSql = string.Empty;
@@ -752,9 +752,13 @@ namespace WZGX.WebAPI.Controllers.jygl
                     {
                         updateSql = "UPDATE jy_cbjh set PROCESS_STATE=0 where XMBH='" + instanceid + "'";
                     }
-                    else
+                    else if(formtype==1)
                     {
                         updateSql = "UPDATE jy_fybx set PROCESS_STATE=0 where BXDH='" + instanceid + "'";
+                    }
+                    else
+                    {
+                        updateSql = "UPDATE jy_clbx set PROCESS_STATE=0 where CLBH='" + instanceid + "'";                      
                     }
                     List<string> list = new List<string>();
                     list.Add(revokeSql);
