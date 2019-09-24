@@ -164,5 +164,41 @@ namespace UIDP.BIZModule.jyglModules
             }
             return r;
         }
+        /// <summary>
+        /// 查询费用已办列表
+        /// </summary>
+        /// <param name="XMBH"></param>
+        /// <param name="XMMC"></param>
+        /// <param name="page"></param>
+        /// <param name="limit"></param>
+        /// <param name="userid"></param>
+        /// <returns></returns>
+        public Dictionary<string, object> GetFYYBInfo(string BXDH, string FYXM, int page, int limit, string userid)
+        {
+            Dictionary<string, object> r = new Dictionary<string, object>();
+            try
+            {
+                DataTable dt = db.GetFYYBInfo(BXDH, FYXM, userid);
+                if (dt.Rows.Count > 0)
+                {
+                    r["code"] = 2000;
+                    r["message"] = "success";
+                    r["items"] = KVTool.GetPagedTable(dt, page, limit);
+                    r["total"] = dt.Rows.Count;
+                }
+                else
+                {
+                    r["code"] = 2000;
+                    r["message"] = "success,but no info ";
+                    r["total"] = dt.Rows.Count;
+                }
+            }
+            catch (Exception e)
+            {
+                r["code"] = -1;
+                r["message"] = e.Message;
+            }
+            return r;
+        }
     }
 }

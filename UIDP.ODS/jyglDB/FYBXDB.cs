@@ -13,18 +13,18 @@ namespace UIDP.ODS.jyglDB
 
         public DataTable GetInfo(Dictionary<string, object> d)
         {
-            string sql = " SELECT a.*,b.Name as FKFSName FROM jy_fybx a left join tax_dictionary b on a.FKFS=b.Code  WHERE IS_DELETE=0";
+            string sql = " SELECT a.*,b.Name as FKFSName,c.SFCW,c.TZHJHZJE FROM jy_fybx a join jy_cbjh c on a.XMBH=c.XMBH left join tax_dictionary b on a.FKFS=b.Code  WHERE a.IS_DELETE=0";
             if (d.Keys.Contains("BXDH") && d["BXDH"] != null && d["BXDH"].ToString() != "")
             {
-                sql += " and BXDH like '%" + d["BXDH"].ToString() + "%'";
+                sql += " and a.BXDH like '%" + d["BXDH"].ToString() + "%'";
             }
             if (d.Keys.Contains("S_BeginDate") && d["S_BeginDate"] != null && d["S_BeginDate"].ToString() != "" && d.Keys.Contains("S_EndDate") && d["S_EndDate"] != null && d["S_EndDate"].ToString() != "")
             {
                 DateTime bdate = Convert.ToDateTime(d["S_BeginDate"].ToString());
                 DateTime edate = Convert.ToDateTime(d["S_EndDate"].ToString());
-                sql += "and  SQSJ BETWEEN '" + bdate.ToString("yyyy-MM-dd") + "' AND '" + edate.ToString("yyyy-MM-dd") + "'";
+                sql += "and  a.SQSJ BETWEEN '" + bdate.ToString("yyyy-MM-dd") + "' AND '" + edate.ToString("yyyy-MM-dd") + "'";
             }
-            sql += " AND CJR='" + d["userid"] + "'";
+            sql += " AND a.CJR='" + d["userid"] + "'";
             return db.GetDataTable(sql);
         }
 
@@ -127,6 +127,35 @@ namespace UIDP.ODS.jyglDB
                          join RF_FlowTask c on a.BXDH=c.InstanceId and LEFT(a.BXDH,2)='FY'
                         join jy_cbjh d on d.XMBH=a.XMBH
                         WHERE a.IS_DELETE=0 and c.Status IN(0,1) ";
+            if (!string.IsNullOrEmpty(userid))
+            {
+                sql += " AND c.ReceiveId ='" + userid.ToUpper() + "'";
+            }
+            if (!string.IsNullOrEmpty(BXDH))
+            {
+                sql += " AND a.BXDH LIKE'" + BXDH + "%'";
+            }
+            if (!string.IsNullOrEmpty(FYXM))
+            {
+                sql += " AND a.FYXM='" + FYXM + "'";
+            }
+            return db.GetDataTable(sql);
+        }
+        /// <summary>
+        /// 查询费用已办列表
+        /// </summary>
+        /// <param name="XMBH"></param>
+        /// <param name="XMMC"></param>
+        /// <param name="userid"></param>
+        /// <returns></returns>
+        public DataTable GetFYYBInfo(string BXDH, string FYXM, string userid)
+        {
+            string sql = @"SELECT a.*,c.Id,c.FlowId,c.FlowName,c.StepId,c.StepName,c.InstanceId,c.GroupId,c.TaskType,c.Title,c.SenderId,c.SenderName,c.ReceiveTime,c.CompletedTime,c.Status,c.Note,
+                          d.TZHJHZJE,d.YBXJE
+                        FROM jy_fybx a 
+                         join RF_FlowTask c on a.BXDH=c.InstanceId and LEFT(a.BXDH,2)='FY'
+                        join jy_cbjh d on d.XMBH=a.XMBH
+                        WHERE a.IS_DELETE=0 and  c.ExecuteType>1 ";
             if (!string.IsNullOrEmpty(userid))
             {
                 sql += " AND c.ReceiveId ='" + userid.ToUpper() + "'";

@@ -47,5 +47,16 @@ namespace JYGL.WebAPI.Controllers.jygl
         /// <returns></returns>
         [HttpGet("GetFYSPInfo")]
         public IActionResult GetFYSPInfo(string BXDH, string FYXM, int page, int limit, string userid) => Ok(FB.GetFYSPInfo(BXDH, FYXM, page, limit, userid));
+        /// <summary>
+        /// 费用已办查询列表
+        /// </summary>
+        /// <param name="XMBH"></param>
+        /// <param name="XMMC"></param>
+        /// <param name="page"></param>
+        /// <param name="limit"></param>
+        /// <param name="userid"></param>
+        /// <returns></returns>
+        [HttpGet("GetFYYBInfo")]
+        public IActionResult GetFYYBInfo(string BXDH, string FYXM, int page, int limit, string userid) => Ok(FB.GetFYYBInfo(BXDH, FYXM, page, limit, userid));
     }
 }
