@@ -101,7 +101,6 @@ namespace UIDP.ODS.jyglDB
         {
             List<string> sqllist = new List<string>();
             string sql = "UPDATE jy_clbx SET DWBM=" + GetSQLStr(d["DWBM"]);
-            sql += "DWBM=" + GetSQLStr(d["DWBM"]);
             sql += "CCXM=" + GetSQLStr(d["CCXM"]);
             sql += "CCSY=" + GetSQLStr(d["CCSY"]);
             sql += "CCKSSJ=" + GetSQLStr(d["CCKSSJ"]);
