@@ -12,12 +12,12 @@ namespace UIDP.ODS.jyglDB
         DBTool db = new DBTool("");
         public DataTable GetInfo(string CLBH,string userid)
         {
-            string sql = " select * from jy_clbx where IS_DELETE=0";
+            string sql = " select a.*,c.SFCW,c.TZHJHZJE,c.YBXJE from jy_clbx a join jy_cbjh c on a.XMBH=c.XMBH  where a.IS_DELETE=0";
             if (!String.IsNullOrEmpty(CLBH))
             {
-                sql += " and CLBH='" + CLBH + "'";
+                sql += " and a.CLBH='" + CLBH + "'";
             }
-            sql += " and CJR='" + userid + "'";
+            sql += " and a.CJR='" + userid + "'";
             return db.GetDataTable(sql);
         }
 
@@ -195,7 +195,7 @@ namespace UIDP.ODS.jyglDB
         public DataTable GetSPInfo(string BXDH, string userid)
         {
             string sql = "select a.*,b.Id,b.FlowId,b.FlowName,b.StepId,b.StepName,b.InstanceId,b.GroupId,b.TaskType,b.Title,b.SenderId,b.SenderName,b.ReceiveTime," +
-                "b.CompletedTime,b.Status,b.Note from jy_clbx a left join RF_FlowTask b on a.CLBH=b.InstanceId where 1=1 and a.IS_DELETE=0 AND b.ReceiveId='{0}'" +
+                "b.CompletedTime,b.Status,b.Note, d.TZHJHZJE,d.YBXJE,d.SFCW from jy_clbx a left join RF_FlowTask b on a.CLBH=b.InstanceId join jy_cbjh d on d.XMBH=a.XMBH where 1=1 and a.IS_DELETE=0 AND b.ReceiveId='{0}'" +
                 "and left(b.InstanceId,2)='CL'";
             sql = string.Format(sql, userid.ToUpper());
             if (!String.IsNullOrEmpty(BXDH))

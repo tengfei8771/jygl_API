@@ -13,7 +13,7 @@ namespace UIDP.ODS.jyglDB
 
         public DataTable GetInfo(Dictionary<string, object> d)
         {
-            string sql = " SELECT a.*,b.Name as FKFSName,c.SFCW,c.TZHJHZJE FROM jy_fybx a join jy_cbjh c on a.XMBH=c.XMBH left join tax_dictionary b on a.FKFS=b.Code  WHERE a.IS_DELETE=0";
+            string sql = " SELECT a.*,b.Name as FKFSName,c.SFCW,c.TZHJHZJE,c.YBXJE FROM jy_fybx a join jy_cbjh c on a.XMBH=c.XMBH left join tax_dictionary b on a.FKFS=b.Code  WHERE a.IS_DELETE=0";
             if (d.Keys.Contains("BXDH") && d["BXDH"] != null && d["BXDH"].ToString() != "")
             {
                 sql += " and a.BXDH like '%" + d["BXDH"].ToString() + "%'";
