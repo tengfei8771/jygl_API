@@ -192,17 +192,30 @@ namespace UIDP.ODS.jyglDB
             return db.ExecutByStringResult(sql);
         }
 
-        public DataTable GetSPInfo(string BXDH, string userid)
+        public DataTable GetSPInfo(string CLBH, string userid)
         {
             string sql = "select a.*,b.Id,b.FlowId,b.FlowName,b.StepId,b.StepName,b.InstanceId,b.GroupId,b.TaskType,b.Title,b.SenderId,b.SenderName,b.ReceiveTime," +
                 "b.CompletedTime,b.Status,b.Note, d.TZHJHZJE,d.YBXJE,d.SFCW from jy_clbx a left join RF_FlowTask b on a.CLBH=b.InstanceId join jy_cbjh d on d.XMBH=a.XMBH where 1=1 and a.IS_DELETE=0 AND b.ReceiveId='{0}'" +
                 "and left(b.InstanceId,2)='CL'";
             sql = string.Format(sql, userid.ToUpper());
-            if (!String.IsNullOrEmpty(BXDH))
+            if (!String.IsNullOrEmpty(CLBH))
             {
-                sql += " AND BXDH='" + BXDH + "'";
+                sql += " AND a.CLBH='" + CLBH + "'";
             }
             sql += " AND b.Status IN(0,1)";
+            return db.GetDataTable(sql);
+        }
+        public DataTable GetYBInfo(string CLBH, string userid)
+        {
+            string sql = "select a.*,b.Id,b.FlowId,b.FlowName,b.StepId,b.StepName,b.InstanceId,b.GroupId,b.TaskType,b.Title,b.SenderId,b.SenderName,b.ReceiveTime," +
+                "b.CompletedTime,b.Status,b.Note, d.TZHJHZJE,d.YBXJE,d.SFCW from jy_clbx a left join RF_FlowTask b on a.CLBH=b.InstanceId join jy_cbjh d on d.XMBH=a.XMBH where 1=1 and a.IS_DELETE=0 AND b.ReceiveId='{0}'" +
+                "and left(b.InstanceId,2)='CL'";
+            sql = string.Format(sql, userid.ToUpper());
+            if (!String.IsNullOrEmpty(CLBH))
+            {
+                sql += " AND a.CLBH='" + CLBH + "'";
+            }
+            sql += " AND b.ExecuteType>1 ";
             return db.GetDataTable(sql);
         }
         public DataTable GetSPXCInfo(string CLBH)

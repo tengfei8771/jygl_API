@@ -19,6 +19,8 @@ namespace JYGL.WebAPI.Controllers.jygl
         public IActionResult GetInfo(string CLBH, int page, int limit,string userid) => Ok(TE.GetInfo(CLBH,page, limit,userid));
         [HttpGet("GetSPInfo")]
         public IActionResult GetSPInfo(string CLBH, int page, int limit, string userid) => Ok(TE.GetSPInfo(CLBH, page, limit, userid));
+        [HttpGet("GetYBInfo")]
+        public IActionResult GetYBInfo(string CLBH, int page, int limit, string userid) => Ok(TE.GetYBInfo(CLBH, page, limit, userid));
         [HttpGet("GetSPXCInfo")]
         public IActionResult GetSPXCInfo(string CLBH) => Ok(TE.GetSPXCInfo(CLBH));
         [HttpGet("GetCLXCInfo")]
