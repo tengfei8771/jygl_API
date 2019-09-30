@@ -83,12 +83,12 @@
         
         //top.openApp("/RoadFlowCore/FlowDesigner/Index1?flowid=" + id + "&@Html.Raw(ViewData["query"])", 0, "编辑" + flowName + "流程", id);
         //window.parent.openApp("/RoadFlowCore/FlowDesigner/Index1?flowid=" + id + "&@Html.Raw(ViewData["query"])", 0, "编辑" + flowName + "流程", id);
-        window.location = "/RoadFlowCore/FlowDesigner/Index1?flowid=" + id + "&@Html.Raw(ViewData["query"])";
+        window.location = "Index1?flowid=" + id + "&@Html.Raw(ViewData["query"])";
     }
     function newflow()
     {
         //top.openApp("/RoadFlowCore/FlowDesigner/Index1?isnewflow=1&@Html.Raw(ViewData["query"])", 0, "新建流程", RoadUI.Core.newid(false));
-       window.location = "/RoadFlowCore/FlowDesigner/Index1?isnewflow=1&@Html.Raw(ViewData["query"])";
+        window.location = "Index1?isnewflow=1&@Html.Raw(ViewData["query"])";
        // window.parent.openApp("/RoadFlowCore/FlowDesigner/Index1?isnewflow=1&@Html.Raw(ViewData["query"])", 0, "新建流程", RoadUI.Core.newid(false));
     }
     function delflow(but)
