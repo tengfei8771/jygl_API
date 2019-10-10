@@ -37,7 +37,7 @@ namespace JYGL.WebAPI.Controllers.jygl
         public IActionResult GetTreeOptions(string code) => Ok(CB.GetTreeOptions(code));
 
         [HttpGet("GetYearProject")]
-        public IActionResult GetYearProject() => Ok(CB.GetYearProject());
+        public IActionResult GetYearProject(string userid) => Ok(CB.GetYearProject(userid));
         [HttpPost("UpdateAddCBJHJE")]
         public IActionResult UpdateAddCBJHJE([FromBody]JObject value) => Ok(CB.UpdateAddCBJHJE(value));
 

@@ -10,7 +10,7 @@ namespace UIDP.ODS.jyglDB
     {
         DBTool db = new DBTool("");
 
-        public DataTable GetInfo(string XMBH,string XMMC,string userid,int type)
+        public DataTable GetInfo(string XMBH,string XMMC,string userid,int type)//type 类型，0为查询自己申请的所有项目项目，1为自己申请的非补充项目，其他类型为别的功能查询已经审批通过的项目信息
         {
             string sql = " SELECT a.*,b.Name as PC ,c.Name as LB,d.ORG_NAME CBDWMC FROM jy_cbjh a left join tax_dictionary b on a.XMPC=b.Code left join tax_dictionary c on c.Code=a.XMLB left join ts_uidp_org d on a.CBDW=d.ORG_CODE WHERE a.IS_DELETE=0 ";
             if (!string.IsNullOrEmpty(XMBH))
@@ -23,8 +23,19 @@ namespace UIDP.ODS.jyglDB
             }
             if (type == 0)
             {
-                sql += " AND CJR='" + userid + "'";
+                sql += " AND a.CJR='" + userid + "'";
             }
+            else if (type == 2)
+            {
+                sql += " AND a.CJR='" + userid + "'";
+                sql += " AND a.IS_ADJUSTMENT=0";
+            }
+            else
+            {
+                sql += " AND a.PROCESS_STATE=2";
+                sql += " AND a.IS_ADJUSTMENT=0";
+            }
+            sql += "order by a.CJSJ desc";
             //sql += " LIMIT " + (page - 1) * limit + "," + limit;
             ///待添加功能，只有流程审批完成后才能选择项目，sql+=" PROCESS_STATE=2"
             return db.GetDataTable(sql);
@@ -57,7 +68,7 @@ WHERE a.IS_DELETE=0 and c.ExecuteType>1 ";
         public string CreateInfo(Dictionary<string,object> d,List<Dictionary<string,object>> list,string XMBH)
         {
             List<string> sqllist = new List<string>();
-            string sql = "INSERT INTO jy_cbjh (XMBH,XMMC,CBDW,JSNR,JHZJE,TZHJHZJE,LSJE,BNJE,WLJE,XMPC,CJR,CJSJ,IS_DELETE,CZWZ,WZJHJE,XMLB,HASINCOME,XMCODE,JHND,PROCESS_STATE)values(";
+            string sql = "INSERT INTO jy_cbjh (XMBH,XMMC,CBDW,JSNR,JHZJE,TZHJHZJE,LSJE,BNJE,WLJE,XMPC,CJR,CJSJ,IS_DELETE,CZWZ,WZJHJE,XMLB,HASINCOME,XMCODE,JHND,PROCESS_STATE,IS_ADJUSTMENT,TZJE)values(";
             sql += GetSQLStr(XMBH);
             sql += GetSQLStr(d["XMMC"]);
             sql += GetSQLStr(d["CBDW"]);
@@ -79,6 +90,8 @@ WHERE a.IS_DELETE=0 and c.ExecuteType>1 ";
             sql += GetSQLStr(d["XMCODE"]);
             sql += GetSQLStr(d["JHND"]);
             sql += GetSQLStr(0,1);
+            sql += GetSQLStr(d["IS_ADJUSTMENT"],1);
+            sql += GetSQLStr(d["TZJE"], 1);
             sql = sql.TrimEnd(',');
             sql += ")";
             sqllist.Add(sql);
@@ -127,6 +140,7 @@ WHERE a.IS_DELETE=0 and c.ExecuteType>1 ";
             sql += "HASINCOME=" + GetSQLStr(d["HASINCOME"], 1);
             sql += " XMCODE=" + GetSQLStr(d["XMCODE"]);
             sql += " JHND=" + GetSQLStr(d["JHND"]);
+            sql += " IS_ADJUSTMENT=" + GetSQLStr(d["IS_ADJUSTMENT"],1);
             sql = sql.TrimEnd(',');
             sql += " WHERE XMBH=" + GetSQLStr(d["XMBH"]);
             sql = sql.TrimEnd(',');
@@ -188,9 +202,9 @@ WHERE a.IS_DELETE=0 and c.ExecuteType>1 ";
 
         }
 
-        public DataTable GetYearProject()
+        public DataTable GetYearProject(string userid)
         {
-            string sql = "select XMMC,XMCODE from jy_cbjh where YEAR(JHND)='" + DateTime.Now.Year + "'";
+            string sql = "select XMMC,XMCODE from jy_cbjh where YEAR(JHND)='" + DateTime.Now.Year + "' AND CJR='"+userid+ "' AND IS_ADJUSTMENT=0";
             return db.GetDataTable(sql);
         }
 

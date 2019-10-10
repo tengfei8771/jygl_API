@@ -228,12 +228,12 @@ namespace UIDP.BIZModule.jyglModules
             return d;
         }
 
-        public Dictionary<string,object> GetYearProject()
+        public Dictionary<string,object> GetYearProject(string userid)
         {
             Dictionary<string, object> r = new Dictionary<string, object>();
             try
             {
-                DataTable dt = db.GetYearProject();
+                DataTable dt = db.GetYearProject(userid);
                 if (dt.Rows.Count > 0)
                 {
                     r["code"] = 2000;
